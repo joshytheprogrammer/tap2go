@@ -66,8 +66,12 @@
 </template>
 
 <script setup>
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut, validatePassword } from 'firebase/auth';
 import { useUserStore } from "@/store/user";
+
+definePageMeta({
+  middleware: ['auth']
+});
 
 const userStore = useUserStore();
 const firebaseAuth = useFirebaseAuth();
@@ -82,28 +86,41 @@ const user = reactive({
 });
 
 async function login() {
-  if (!validatePassword(user.password)) {
-    toast.add({ title: 'Invalid password', description: 'Password must be at least 8 characters.', color: 'red' });
+  loading.value = true;
+
+  const status = await validatePassword(firebaseAuth, user.password);
+
+  if (!status.isValid) {
+    toast.add({ title: 'Invalid password', description: 'Password did not meet minimum requirements', color: 'red' });
     return;
   }
 
-  loading.value = true;
-
   try {
     const credential = await signInWithEmailAndPassword(firebaseAuth, user.email, user.password);
+
+    if (!credential.user.emailVerified) {
+      // Sign the user out immediately
+      await signOut(firebaseAuth);
+      toast.add({
+        title: 'Email not verified',
+        description: 'Please verify your email before logging in.',
+        color: 'red',
+      });
+      return;
+    }
+
     await userStore.setUser({ uid: credential.user.uid });
-    toast.add({ title: 'Authentication successful' });
+
+    toast.add({ title: 'Login successful', description: 'Welcome back!' });
+    console.log(credential)
     navigateTo('/');
   } catch (error) {
-    toast.add({ title: 'An error occurred', description: error.code, color: 'red' });
+    toast.add({ title: 'Login failed', description: error.code, color: 'red' });
     console.error(error);
   } finally {
     loading.value = false;
   }
 }
 
-function validatePassword(password) {
-  return password.length >= 8;
-}
 
 </script>

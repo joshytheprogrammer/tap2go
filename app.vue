@@ -2,6 +2,7 @@
   <div class="">
     <main class="w-full md:max-w-md mx-auto">
       <NuxtPage  />
+      <UNotifications />
     </main>
   </div>
 </template>
