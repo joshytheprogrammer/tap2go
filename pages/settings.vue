@@ -1,6 +1,5 @@
 <template>
   <div>
-    Hellow world
     <AppBottom />
   </div>
 </template>
