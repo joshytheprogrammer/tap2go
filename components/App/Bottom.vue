@@ -1,6 +1,6 @@
 <template>
-  <div class="fixed bottom-0 left-0 w-full bg-white shadow-lg">
-    <div class="w-full max-w-md mx-auto flex justify-between p-4 border-t-2">
+  <div class="fixed bottom-0 left-0 w-full bg-gray-900 shadow-lg">
+    <div class="w-full max-w-md mx-auto flex bg-white justify-between p-4 border-t-1">
       <NuxtLink to="/" class="flex flex-col items-center text-gray-600">
         <HomeIcon class="size-5" />
         <span class="text-sm">Home</span>
