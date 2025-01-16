@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 export const useUserStore = defineStore('user', {
   state: () => ({ 
     user: {
-      email: useCookie('user').value?.email,
+      
     },
     userBalance: 0,
     auth: {
@@ -33,7 +33,7 @@ export const useUserStore = defineStore('user', {
       
       this.auth.uid = ''
       this.auth.isAuthenticated = false
-      this.user.email = null
+      this.user = {}
       this.userBalance = 0
     }
   },
