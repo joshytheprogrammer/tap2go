@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <AppComingSoon />
+  <div class="bg-gray-100">
+    <AppNavGeneral />
     <AppBottom />
   </div>
 </template>
