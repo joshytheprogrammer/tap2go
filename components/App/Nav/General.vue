@@ -1,0 +1,27 @@
+<template>
+  <div class="sticky top-0 bg-white shadow-md flex items-center justify-between p-4">
+    <!-- Profile Section -->
+    <div class="flex items-center gap-2">
+      <img 
+        src="https://randomuser.me/api/portraits/men/1.jpg" 
+        alt="Profile" 
+        class="w-10 h-10 rounded-full"
+      />
+    </div>
+
+    <h1 class="font-medium text-gray-800">Tap 2 Go</h1>
+
+    <!-- Notification Icon -->
+    <div class="relative bg-gray-300 rounded-full">
+      <button class="  p-2">
+        <BellIcon class="size-5" />
+      </button>
+      <!-- Will only display if there is a notification that is marked as unread. -->
+      <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+    </div>
+  </div>
+</template>
+
+<script setup>
+  import { BellIcon } from '@heroicons/vue/24/outline'
+</script>
