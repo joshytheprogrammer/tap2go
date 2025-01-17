@@ -9,7 +9,7 @@
       />
     </div>
 
-    <h1 class="font-medium text-gray-800">Tap 2 Go</h1>
+    <h1 class="text-2xl text-gray-800 uppercase font-semibold">Tap2Go</h1>
 
     <!-- Notification Icon -->
     <div class="relative bg-gray-300 rounded-full">
