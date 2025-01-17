@@ -9,11 +9,11 @@
       />
     </div>
 
-    <h1 class="text-2xl text-gray-800 uppercase font-semibold">Tap2Go</h1>
+    <NuxtLink to="/" class="text-2xl text-gray-800 cursor-pointer uppercase font-semibold">Tap2Go</NuxtLink>
 
     <!-- Notification Icon -->
-    <div class="relative bg-gray-300 rounded-full">
-      <button class="  p-2">
+    <div @click="navigateTo('notifications')" class="relative bg-gray-300 rounded-full">
+      <button class="p-2">
         <BellIcon class="size-5" />
       </button>
       <!-- Will only display if there is a notification that is marked as unread. -->
