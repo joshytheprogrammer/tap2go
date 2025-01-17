@@ -24,7 +24,7 @@
 
     <!-- Menu Options -->
     <div class="mt-8 space-y-3 px-4">
-      <button class="w-full bg-blue-600 text-white p-4 rounded-lg text-center font-semibold flex justify-between items-center">
+      <button @click="navigateTo('/profile')" class="w-full bg-blue-600 text-white p-4 rounded-lg text-center font-semibold flex justify-between items-center">
         Manage Profile
         <ChevronRightIcon class="size-5 text-white" />
       </button>
