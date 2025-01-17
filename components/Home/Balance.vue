@@ -25,7 +25,7 @@ const isOpen = ref(false);
 
 const toggleModal = () => {
   isOpen.value = !isOpen.value;
-}
+};
 </script>
 
 <style lang="scss" scoped>
