@@ -1,7 +1,7 @@
 <template>
   <div class="sticky top-0 bg-white shadow-md flex items-center justify-between p-4">
     <!-- Profile Section -->
-    <div class="flex items-center gap-2">
+    <div @click="navigateTo('profile')" class="flex items-center gap-2 cursor-pointer">
       <img 
         src="https://randomuser.me/api/portraits/men/1.jpg" 
         alt="Profile" 

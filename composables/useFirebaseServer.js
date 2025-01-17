@@ -1,5 +1,6 @@
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 
 // Parse the service account JSON from the environment variable
 if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
@@ -27,6 +28,7 @@ const db = getFirestore(app);
 
 export default function useFirebaseServer() {
   return {
-    db
+    db,
+    getAuth
   };
 }
