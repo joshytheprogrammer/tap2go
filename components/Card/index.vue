@@ -3,7 +3,7 @@
     <!-- Card Display -->
     <div class="mt-6 flex justify-center">
       <div class="w-80 h-48 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 text-white shadow-lg flex justify-between items-end ">
-        <span class="text-lg font-semibold">22CG032043</span>
+        <span class="text-lg font-semibold ">22CG032043</span>
         <img src="@/assets/card-chip.svg" alt="Card Chip" class="w-10" />
       </div>
     </div>
