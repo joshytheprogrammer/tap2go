@@ -28,7 +28,7 @@
         Manage Profile
         <ChevronRightIcon class="size-5 text-white" />
       </button>
-      <div v-for="option in menuOptions" :key="option.label" class="flex justify-between items-center p-4 border-b border-gray-200 cursor-pointer rounded-lg text-gray-700 hover:text-white hover:bg-blue-600">
+      <div v-for="option in menuOptions" :key="option.label" @click="navigateTo(option.url)" class="flex justify-between items-center p-4 border-b border-gray-200 cursor-pointer rounded-lg text-gray-700 hover:text-white hover:bg-blue-600">
         <p class="">{{ option.label }}</p>
         <ChevronRightIcon class="size-5" />
       </div>
@@ -43,9 +43,9 @@ import { ChevronLeftIcon, BellIcon, ChevronRightIcon } from '@heroicons/vue/24/o
 const hasUnreadNotifications = ref(true)
 
 const menuOptions = ref([
-  { label: "Request New Card" },
-  { label: "Submit Complaints" },
-  { label: "Contact" }
+  { label: "Request New Card", url: 'request-card' },
+  { label: "Submit Complaints", url: 'submit-complaint' },
+  { label: "Contact", url: 'contact' }
 ]);
 
 </script>
