@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full min-h-screen bg-white">
+  <section class="w-full min-h-screen bg-white">
     <!-- Header -->
     <div class="flex justify-between items-center p-4 border-b border-gray-300">
       <button class="rounded-full p-2 bg-gray-200" @click="$router.go(-1)">
@@ -38,7 +38,7 @@
           </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

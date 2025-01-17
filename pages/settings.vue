@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-100">
-    <AppNavGeneral />
+    <Settings />
     <AppBottom />
   </div>
 </template>
