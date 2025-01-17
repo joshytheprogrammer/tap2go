@@ -1,0 +1,32 @@
+<template>
+  <div>
+    <button @click="isOpen = true" class="w-full flex justify-between items-center p-4 border-b border-gray-200 cursor-pointer rounded-lg text-gray-700 hover:text-white hover:bg-red-600">
+      Logout
+      <ChevronRightIcon class="size-5" />
+    </button>
+
+    <UModal v-model="isOpen">
+      <div class="py-12 px-4">
+        <div class="flex flex-col justify-center items-center text-center gap-4">
+          <h1 class="text-4xl font-semibold text-blue-600">Confirm Logout</h1>
+          <p class="text-gray-700">Are you sure you want to logout?</p>
+          <div class="flex flex-col gap-4 w-2/3 pt-8" >
+            <button @click="" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg text-lg font-semibold shadow-md transition">
+              Logout
+            </button>
+            <button @click="" class="w-full bg-gray-400 hover:bg-gray-800 text-white py-3 rounded-lg text-lg font-semibold shadow-md transition">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </UModal>
+  </div>
+</template>
+
+<script setup>
+import { ChevronRightIcon } from '@heroicons/vue/24/outline'
+
+const isOpen = ref(false);
+
+</script>
