@@ -1,5 +1,6 @@
 <template>
   <div>
+    <AppNavGeneral />
     <AppComingSoon />
     <AppBottom />
   </div>

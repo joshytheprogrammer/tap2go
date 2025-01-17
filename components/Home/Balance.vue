@@ -1,5 +1,5 @@
 <template>
-  <section class="flex justify-center w-full items-center text-center py-12">
+  <section class="flex justify-center w-full items-center text-center pt-12 pb-8">
     <div class="space-y-1.5">
       <p class="text-slate-500 text-sm">Available Balance</p>
       <h2 class="text-2xl font-bold">

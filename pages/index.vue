@@ -2,11 +2,11 @@
   <div class="">
     <AppNavGeneral />
     <!-- <AppComingSoon /> -->
-     <div class="bg-gray-100">
+    <div class="bg-gray-100 mb-16">
       <HomeBalance />
       <HomeSummary />
       <HomeRecent />
-     </div>
+    </div>
     <AppBottom />
   </div>
 </template>
