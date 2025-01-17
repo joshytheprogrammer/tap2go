@@ -4,7 +4,7 @@
       <p class="text-slate-500 text-sm">Available Balance</p>
       <h2 class="text-2xl font-bold">
         {{ 
-          new Intl.NumberFormat('en-NG', {style: 'currency', currency: 'NGN'}).format(5000.75)
+          new Intl.NumberFormat('en-NG', {style: 'currency', currency: 'NGN'}).format(userStore.getBalance)
         }}
       </h2>
       <p>
@@ -18,10 +18,13 @@
 </template>
 
 <script setup>
+import { useUserStore } from "@/store/user";
+
+const userStore = useUserStore();
 const isOpen = ref(false);
 
 const toggleModal = () => {
-  isOpen.value = !isOpen.value
+  isOpen.value = !isOpen.value;
 }
 </script>
 
