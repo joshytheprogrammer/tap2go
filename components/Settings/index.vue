@@ -1,7 +1,7 @@
 <template>
-  <section class="w-full min-h-screen bg-white">
+  <section class="w-full min-h-screen ">
     <!-- Header -->
-    <div class="flex justify-between items-center p-4 border-b border-gray-300">
+    <div class="flex justify-between items-center p-4 border-b border-gray-300 bg-white">
       <button class="rounded-full p-2 bg-gray-200" @click="$router.go(-1)">
         <ChevronLeftIcon class="size-5" />
       </button>

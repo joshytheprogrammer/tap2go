@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 pb-8">
+  <div class="bg-gray-100">
     <Settings />
     <AppBottom />
   </div>

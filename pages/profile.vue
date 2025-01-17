@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-gray-100 flex flex-col items-center px-4 py-6">
+  <div class="w-full bg-gray-100">
     <!-- Header -->
-    <div class="w-full flex items-center justify-between mb-6">
+    <div class="flex justify-between items-center border-b p-4 border-gray-300 bg-white">
       
       <button class="rounded-full p-2 bg-gray-200" @click="$router.go(-1)">
         <ChevronLeftIcon class="size-5" />
@@ -16,43 +16,45 @@
       </div>
     </div>
 
-    <!-- Profile Picture -->
-    <div class="flex flex-col items-center mb-6">
-      <img
-        src="https://randomuser.me/api/portraits/men/1.jpg"
-        alt="Profile Picture"
-        class="w-24 h-24 rounded-full object-cover"
-      />
-      <button
-        @click="changePicture"
-        class="text-blue-600 text-sm mt-2 underline"
-      >
-        Change Picture
-      </button>
-    </div>
-
-    <!-- Form Fields -->
-    <form @submit.prevent="saveProfile" class="w-full space-y-4">
-      <div v-for="(field, index) in profileFields" :key="index" class="space-y-2">
-        <label :for="field.name" class="block text-sm text-gray-600">
-          {{ field.label }}
-        </label>
-        <input
-          :id="field.name"
-          :type="field.type"
-          :placeholder="field.placeholder"
-          v-model="field.value"
-          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          :disabled="field.disabled"
+    <div class=" flex flex-col items-center px-4 py-6 ">
+      <!-- Profile Picture -->
+      <div class="flex flex-col items-center mb-6">
+        <img
+          src="https://randomuser.me/api/portraits/men/1.jpg"
+          alt="Profile Picture"
+          class="w-24 h-24 rounded-full object-cover"
         />
+        <button
+          @click="changePicture"
+          class="text-blue-600 text-sm mt-2 underline"
+        >
+          Change Picture
+        </button>
       </div>
-      <button
-        type="submit"
-        class="w-full py-4 bg-blue-600 text-white rounded-md text-center"
-      >
-        Save
-      </button>
-    </form>
+
+      <!-- Form Fields -->
+      <form @submit.prevent="saveProfile" class="w-full space-y-4">
+        <div v-for="(field, index) in profileFields" :key="index" class="space-y-2">
+          <label :for="field.name" class="block text-sm text-gray-600">
+            {{ field.label }}
+          </label>
+          <input
+            :id="field.name"
+            :type="field.type"
+            :placeholder="field.placeholder"
+            v-model="field.value"
+            class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 disabled:bg-gray-200 focus:ring-blue-500"
+            :disabled="field.disabled"
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full py-4 bg-blue-600 text-white rounded-md text-center"
+        >
+          Save
+        </button>
+      </form>
+    </div>
   </div>
 </template>
 
