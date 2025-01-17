@@ -8,14 +8,21 @@
         }}
       </h2>
       <p>
-        <NuxtLink class="text-base font-semibold  cursor-pointer text-primary-700 underline underline-offset-4">Fund Account</NuxtLink>
+        <NuxtLink class="text-base font-semibold  cursor-pointer text-primary-700 underline underline-offset-4" @click="toggleModal()">Fund Account</NuxtLink>
       </p>
     </div>
+    <UModal v-model="isOpen">
+      <AppMakePayment />
+    </UModal>
   </section>
 </template>
 
 <script setup>
+const isOpen = ref(false);
 
+const toggleModal = () => {
+  isOpen.value = !isOpen.value
+}
 </script>
 
 <style lang="scss" scoped>
