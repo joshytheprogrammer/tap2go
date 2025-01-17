@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="bg-gray-100">
     <AppNavGeneral />
-    <AppComingSoon />
+    <Card />
     <AppBottom />
   </div>
 </template>
