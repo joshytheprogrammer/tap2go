@@ -4,6 +4,8 @@
     <!-- <AppComingSoon /> -->
      <div class="bg-gray-100">
       <HomeBalance />
+      <HomeSummary />
+      <HomeRecent />
      </div>
     <AppBottom />
   </div>
