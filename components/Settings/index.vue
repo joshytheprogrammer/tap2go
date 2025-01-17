@@ -5,7 +5,7 @@
       <button class="rounded-full p-2 bg-gray-200" @click="$router.go(-1)">
         <ChevronLeftIcon class="size-5" />
       </button>
-      <h1 class="text-lg font-semibold">Notifications</h1>
+      <h1 class="text-lg font-semibold">Settings</h1>
 
       <!-- Notification Icon -->
       <div @click="navigateTo('notifications')" class="relative bg-gray-300 rounded-full">
@@ -22,7 +22,4 @@
 <script setup>
 import { ChevronLeftIcon, BellIcon } from '@heroicons/vue/24/outline'
 
-definePageMeta({
-  middleware: ['auth']
-});
 </script>

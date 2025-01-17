@@ -13,7 +13,9 @@
       <h2 class="text-lg font-semibold text-gray-800">Settings</h2>
       <div class="bg-gray-100 p-4 mt-3 rounded-xl flex justify-between items-center shadow">
         <div class="flex items-center space-x-3">
-          <div class="text-blue-600 text-2xl">💳</div>
+          <div class="text-blue-600 text-2xl">
+            <img src="@/assets/deactivate-card-icon.svg" alt="deactivate card icon" class="w-8" />
+          </div>
           <p class="text-gray-700 text-sm">Deactivate Card</p>
         </div>
         <input type="checkbox" v-model="isCardDeactivated" class="toggle-checkbox hidden">
