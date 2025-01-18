@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { useUserStore } from '@/store/user';
 
 const db = useFirestore();
@@ -60,13 +60,14 @@ const cardSerialNumber = ref(null);
 const matricNumber = ref(null);
 const isCardDeactivated = ref(false);
 const cardStatus = ref('');
-
 const loading = ref(true);
+
+let userUnsub = null;
+let cardUnsub = null;
 
 const toggleSwitch = () => {
   isCardDeactivated.value = !isCardDeactivated.value;
 };
-
 
 const saveCardStatus = async () => {
   if (!cardSerialNumber.value) return;
@@ -75,7 +76,7 @@ const saveCardStatus = async () => {
   try {
     const cardDoc = doc(db, 'cards', cardSerialNumber.value.toString());
     await updateDoc(cardDoc, { status: isCardDeactivated.value ? 'inactive' : 'active' });
-    toast.add({title: 'Card status updated successfully'});
+    toast.add({ title: 'Card status updated successfully' });
   } catch (error) {
     console.error('Error updating card status:', error);
     toast.add({
@@ -87,102 +88,39 @@ const saveCardStatus = async () => {
   }
 };
 
-onMounted(async () => {
-  try {
-    const userDoc = doc(db, 'users', userStore.getUser.uid);
-    const userSnapshot = await getDoc(userDoc);
+// Fetch user and card data in real-time
+const userDoc = doc(db, 'users', userStore.getUser.uid);
+  
+userUnsub = onSnapshot(userDoc, (userSnapshot) => {
+  if (userSnapshot.exists()) {
+    const userData = userSnapshot.data();
+    cardSerialNumber.value = userData.cardSerialNumber || null;
+    matricNumber.value = userData.matricNumber || null;
 
-    if (userSnapshot.exists()) {
-      const userData = userSnapshot.data();
-      cardSerialNumber.value = userData.cardSerialNumber || null;
-      matricNumber.value = userData.matricNumber || null;
-
-      if (cardSerialNumber.value) {
-        const cardDoc = doc(db, 'cards', cardSerialNumber.value.toString());
-        const cardSnapshot = await getDoc(cardDoc);
-
+    // If cardSerialNumber exists, start listening for card status updates
+    if (cardSerialNumber.value) {
+      const cardDoc = doc(db, 'cards', cardSerialNumber.value.toString());
+      
+      if (cardUnsub) cardUnsub(); // Unsubscribe previous listener if it exists
+      cardUnsub = onSnapshot(cardDoc, (cardSnapshot) => {
         if (cardSnapshot.exists()) {
           const cardData = cardSnapshot.data();
           cardStatus.value = cardData.status;
           isCardDeactivated.value = cardStatus.value === 'inactive';
         }
-      }
+      });
     }
-  } catch (error) {
-    console.error('Error fetching card data:', error);
-  } finally {
-    loading.value = false;
   }
+  loading.value = false;
+}, (error) => {
+  console.error('Error fetching user data:', error);
+  loading.value = false;
 });
-// const saveCardStatus = async () => {
-//   if (!cardSerialNumber.value) return;
 
-//   try {
-//     // Query the cards collection to find the document with the matching serial number
-//     const cardQuery = query(
-//       collection(db, 'cards'),
-//       where('serialNumber', '==', cardSerialNumber.value)
-//     );
+// Cleanup listeners on component unmount
+onUnmounted(() => {
+  if (userUnsub) userUnsub();
+  if (cardUnsub) cardUnsub();
+});
 
-//     const querySnapshot = await getDocs(cardQuery);
-
-//     if (!querySnapshot.empty) {
-//       const cardDoc = querySnapshot.docs[0]; 
-      
-//       await updateDoc(cardDoc.ref, { status: isCardDeactivated.value ? 'inactive' : 'active' });
-
-//       toast.add({title: 'Card status updated successfully'});
-//     } else {
-//       toast.add({
-//         title: 'Card not found',
-//         color: 'red',
-//       });
-//     }
-//   } catch (error) {
-//       console.error('Error updating card status:', error);
-      
-//       toast.add({
-//         title: 'Failed to update card status',
-//         color: 'red',
-//       });
-  // } finally {
-  //     loading.value = false;
-  // }
-// };
-
-
-// onMounted(async () => {
-//   try {
-//     const userDoc = doc(db, 'users', userStore.getUser.uid);
-//     const userSnapshot = await getDoc(userDoc);
-
-//     if (userSnapshot.exists()) {
-//       const userData = userSnapshot.data();
-//       cardSerialNumber.value = userData.cardSerialNumber || null;
-//       matricNumber.value = userData.matricNumber || null;
-
-
-//       if (cardSerialNumber.value) {
-//         const cardQuery = query(
-//           collection(db, 'cards'),
-//           where('serialNumber', '==', cardSerialNumber.value)
-//         );
-        
-//         const querySnapshot = await getDocs(cardQuery);
-//         const cardDoc = querySnapshot.docs[0]; 
-//         const cardSnapshot = await getDoc(cardDoc);
-
-//         if (cardSnapshot.exists()) {
-//           const cardData = cardSnapshot.data();
-//           cardStatus.value = cardData.status;
-//           isCardDeactivated.value = cardStatus.value === 'inactive';
-//         }
-//       }
-//     }
-//   } catch (error) {
-//     console.error('Error fetching card data:', error);
-//   } finally {
-//       loading.value = false;
-//   }
-// });
 </script>

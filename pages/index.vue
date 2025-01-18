@@ -1,8 +1,8 @@
 <template>
-  <div class="">
+  <div class="min-h-screen bg-gray-100">
     <AppNavGeneral />
     
-    <div class="bg-gray-100 mb-16">
+    <div class=" mb-16">
       <HomeBalance />
       <HomeSummary />
       <HomeRecent />

@@ -18,8 +18,8 @@
 
     <!-- Profile Section -->
     <div class="flex flex-col items-center mt-6">
-      <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile" class="w-28 h-28 rounded-full border-2 border-gray-300">
-      <p class="text-blue-600 text-xl font-semibold mt-2 ">Change Name</p>
+      <img :src="profilePicture" alt="Profile" class="w-28 h-28 rounded-full border-2 border-gray-300">
+      <p class="text-blue-600 text-xl font-semibold mt-2 ">{{ userName }}</p>
     </div>
 
     <!-- Menu Options -->
@@ -38,9 +38,16 @@
 </template>
 
 <script setup>
-import { ChevronLeftIcon, BellIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
+import { doc, onSnapshot } from 'firebase/firestore';
+import { useUserStore } from '@/store/user';
+import { ChevronLeftIcon, BellIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
 
-const hasUnreadNotifications = ref(true)
+const db = useFirestore();
+const userStore = useUserStore();
+
+const profilePicture = ref('');
+const userName = ref('Loading...');
+const hasUnreadNotifications = ref(true);
 
 const menuOptions = ref([
   { label: "Request New Card", url: 'request-card' },
@@ -48,4 +55,24 @@ const menuOptions = ref([
   { label: "Contact", url: 'contact' }
 ]);
 
+// Fetch profile details in real-time
+const fetchUserProfile = () => {
+  const profileDocRef = doc(db, 'userProfile', userStore.getUser.uid);
+
+  const unsubscribe = onSnapshot(profileDocRef, (docSnap) => {
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      profilePicture.value = data.profilePicture || 'https://randomuser.me/api/portraits/men/1.jpg';
+      userName.value = data.name || 'Change Name';
+    }
+  }, (error) => {
+    console.error('Error fetching profile:', error);
+  });
+
+  // Cleanup listener on unmount
+  onUnmounted(() => unsubscribe());
+};
+
+// Call fetchUserProfile immediately
+fetchUserProfile();
 </script>

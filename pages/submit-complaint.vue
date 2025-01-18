@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <form @submit.prevent="" class="w-full space-y-4 p-4">
+    <form @submit.prevent="submitComplaint" class="w-full space-y-4 p-4">
       <div class="space-y-2">
         <label class="block text-sm text-gray-600">
           Complaint
@@ -32,8 +32,9 @@
       <button
         type="submit"
         class="w-full py-4 bg-blue-600 text-white rounded-md text-center"
+        :disabled="loading"
       >
-        Submit Complaint
+        {{ loading ? "Submitting..." : "Submit Complaint" }}
       </button>
     </form>
   </div>
@@ -41,8 +42,44 @@
 
 <script setup>
 import { ChevronLeftIcon, BellIcon } from '@heroicons/vue/24/outline';
+import { collection, addDoc } from 'firebase/firestore';
+import { useUserStore } from '@/store/user';
+
+const db = useFirestore();
+const userStore = useUserStore();
+const toast = useToast();
 
 const hasUnreadNotifications = ref(true);
+const loading = ref(false);
 
 const complaint = ref('');
+
+const submitComplaint = async () => {
+  if (!complaint.value ) {
+    toast.add({ title: 'Please fill in all fields', color: 'red' });
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const complaintsRef = collection(db, 'complaints');
+
+    // Save the new request
+    await addDoc(complaintsRef, {
+      uid: userStore.getUser.uid,
+      message: complaint.value,
+      timestamp: new Date()
+    });
+
+    toast.add({ title: 'Complaint submitted successfully', color: 'green' });
+
+    // Reset form
+    complaint.value = '';
+  } catch (error) {
+    console.error('Error submitting complaint:', error);
+    toast.add({ title: 'Failed to submit complaint', color: 'red' });
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
