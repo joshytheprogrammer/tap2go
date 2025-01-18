@@ -9,16 +9,16 @@ export default defineEventHandler(async (event) => {
   try {
     await db.collection('users').doc(rawBody.uid).set({
       email: rawBody.email,
-      matric: rawBody.matric,
+      matricNumber: rawBody.matric,
       balance: 0,
-      cardId: null,
+      cardSerialNumber: null,
       createdAt: Timestamp.fromDate(new Date()),
     });
 
     await db.collection('userProfile').doc(rawBody.uid).set({
       name: '',
       profilePicture: '',
-      telegramNumber: ''
+      telegramAccount: ''
     });
 
     return new Response("User data stored successfully", { status: 201 });

@@ -7,6 +7,13 @@ export default defineNuxtConfig({
     'nuxt-vuefire',
     '@nuxt/ui',
   ],
+  runtimeConfig: {
+    public: {
+      baseUrl: ''
+    },
+    callbackUrl: '',
+    googleApplicationCredentials: ''
+  },
   vuefire: {
     auth: {
       enabled: true
