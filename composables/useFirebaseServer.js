@@ -9,7 +9,7 @@ if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
 
 let firebaseServerAccounts;
 try {
-  firebaseServerAccounts = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  firebaseServerAccounts = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 } catch (error) {
   throw new Error("Failed to parse GOOGLE_APPLICATION_CREDENTIALS. Ensure it is valid JSON.");
 }
