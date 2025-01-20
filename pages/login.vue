@@ -112,7 +112,7 @@ async function login() {
     await userStore.setUser({ uid: credential.user.uid });
 
     toast.add({ title: 'Login successful', description: 'Welcome back!' });
-    console.log(credential)
+    
     navigateTo('/');
   } catch (error) {
     toast.add({ title: 'Login failed', description: error.code, color: 'red' });

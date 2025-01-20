@@ -18,14 +18,32 @@
 </template>
 
 <script setup>
-import { useUserStore } from "@/store/user";
+import { doc, onSnapshot } from 'firebase/firestore'; // Import `doc` instead of `collection` and `query`
+import { useUserStore } from "@/store/user"; // Import the user store
 
-const userStore = useUserStore();
-const isOpen = ref(false);
+const db = useFirestore(); // Firestore instance
+const userStore = useUserStore(); // User store
+const isOpen = ref(false); // Reactive state for the modal
 
+// Toggle modal state
 const toggleModal = () => {
   isOpen.value = !isOpen.value;
 };
+
+const userDocRef = doc(db, 'users', userStore.getUser.uid); 
+
+const unsubscribe = onSnapshot(userDocRef, (userSnapshot) => {
+  if (userSnapshot.exists()) { 
+    const userData = userSnapshot.data(); // Get user data
+    userStore.setUserBalance(userData.balance); 
+  } else {
+    console.log('No such document!');
+  }
+});
+
+onUnmounted(() => {
+  unsubscribe();
+});
 </script>
 
 <style lang="scss" scoped>
