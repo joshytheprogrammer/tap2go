@@ -7,6 +7,9 @@ export default defineNuxtConfig({
     'nuxt-vuefire',
     '@nuxt/ui',
   ],
+  colorMode: {
+    preference: 'light'
+  },
   runtimeConfig: {
     public: {
       baseUrl: ''

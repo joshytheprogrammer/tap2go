@@ -26,7 +26,7 @@
           placeholder="Enter your complaint"
           v-model="complaint"
           rows="4" cols="50"
-          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 "
         ></textarea>
       </div>
       <button

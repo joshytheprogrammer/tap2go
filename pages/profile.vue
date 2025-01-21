@@ -43,7 +43,7 @@
             :type="field.type"
             :placeholder="field.placeholder"
             v-model="field.value"
-            class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 disabled:bg-gray-200 focus:ring-blue-500"
+            class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 disabled:bg-gray-200 focus:ring-blue-500 "
             :disabled="field.disabled"
           />
           <a class="text-blue-600 text-sm mt-2 underline" v-if="field.name=='telegramAccount' && field.value.length == 0" :href="'https://t.me/tap2go_bot?start='+userStore.getUser.uid">Connect Telegram Account</a>

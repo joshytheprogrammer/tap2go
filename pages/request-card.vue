@@ -22,7 +22,7 @@
           type="text"
           placeholder="Enter your hall"
           v-model="hall"
-          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 "
           required
         />
       </div>
@@ -32,7 +32,7 @@
           type="text"
           placeholder="Enter your room number"
           v-model="room"
-          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 "
           required
         />
       </div>

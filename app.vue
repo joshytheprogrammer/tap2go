@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-900">
+  <div class="bg-gray-900 text-black">
     <main class="w-full max-w-md mx-auto">
       <NuxtPage  />
       <UNotifications />

@@ -27,7 +27,7 @@
           </div>
           <p class="text-gray-700 text-sm">Deactivate Card</p>
         </div>
-        <input type="checkbox" v-model="isCardDeactivated" class="toggle-checkbox hidden">
+        <input type="checkbox" v-model="isCardDeactivated" class="toggle-checkbox hidden ">
         <div @click="toggleSwitch" class="w-12 h-6 flex items-center rounded-full p-1 cursor-pointer"
           :class="{'bg-blue-500': isCardDeactivated, 'bg-gray-500': !isCardDeactivated}">
           <div class="w-5 h-5 bg-white rounded-full shadow-md transform transition-transform"

@@ -24,7 +24,7 @@
         <input
           type="text"
           value="+234 702 745 6123"
-          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 disabled:bg-gray-200 focus:ring-blue-500"
+          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 disabled:bg-gray-200 focus:ring-blue-500 "
           disabled
         />
       </div>
@@ -35,7 +35,7 @@
         <input
           type="text"
           value="support@tap2go.com"
-          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 disabled:bg-gray-200 focus:ring-blue-500"
+          class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 disabled:bg-gray-200 focus:ring-blue-500 "
           disabled
         />
       </div>

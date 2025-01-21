@@ -9,13 +9,13 @@
         <div>
           <label class="block text-sm font-medium leading-6 ">Email</label>
           <div class="mt-2 ">
-            <input type="text" autocomplete="email" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800 text-black text-xs sm:text-sm sm:leading-6" v-model="user.email" placeholder="Enter your email address">
+            <input type="text" autocomplete="email" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800 text-black text-xs sm:text-sm sm:leading-6 " v-model="user.email" placeholder="Enter your email address">
           </div>
         </div>
         <div>
           <label class="block text-sm font-medium leading-6 ">Password</label>
           <div class="mt-2">
-            <input type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 p-4  outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800 text-xs text-black sm:text-sm sm:leading-6" v-model="user.password" placeholder="Enter your password">
+            <input type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 p-4  outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800 text-xs text-black sm:text-sm sm:leading-6 " v-model="user.password" placeholder="Enter your password">
           </div>
         </div>
         <div>
