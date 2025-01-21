@@ -1,6 +1,5 @@
 <template>
   <section class="px-4 py-8">
-    <!-- <h2 class="text-4xl font-semibold text-blue-800 pb-8">Make Payment</h2> -->
     <!-- Enter Amount -->
     <div class="mb-6">
       <label
@@ -14,7 +13,7 @@
         type="text"
         v-model="amount"
         placeholder="₦0"
-        class="w-full px-4 py-2 border rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-center font-semibold "
+        class="w-full px-4 py-2 border rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-center font-semibold"
       />
     </div>
 
@@ -39,27 +38,83 @@
     <!-- Next Button -->
     <button
       @click="proceedNext"
-      class="w-full py-2 bg-blue-600 text-white rounded-md text-center font-medium hover:bg-blue-700"
+      :disabled="loading"
+      class="w-full py-2 bg-blue-600 text-white rounded-md text-center font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
     >
-      Next
+      <span v-if="loading">Processing...</span>
+      <span v-else>Next</span>
     </button>
   </section>
 </template>
 
 <script setup>
+import { doc, updateDoc, collection, addDoc, Timestamp } from 'firebase/firestore';
+import { useUserStore } from '@/store/user';
+
+const emit = defineEmits(['close-modal'])
+
 const amount = ref("5000");
 const quickActions = ref([1000, 5000, 10000]);
+const loading = ref(false);
+const toast = useToast();
+
+const userStore = useUserStore();
+const db = useFirestore();
 
 const selectQuickAction = (value) => {
   amount.value = value.toString();
 };
 
-const proceedNext = () => {
-  console.log("Proceed with amount:", amount.value);
-};
+const proceedNext = async () => {
+  try {
+    loading.value = true;
 
+    const enteredAmount = parseFloat(amount.value);
+    if (isNaN(enteredAmount) || enteredAmount <= 0) {
+      toast.add({
+        title: 'Invalid Input',
+        description: 'Please enter a valid amount.',
+        color: 'red',
+      });
+      return;
+    }
+
+    const userDocRef = doc(db, 'users', userStore.getUser.uid);
+    const transactionRef = collection(db, 'transactions');
+
+    // Update user balance in `users` collection
+    await updateDoc(userDocRef, {
+      balance: userStore.getBalance + enteredAmount,
+    });
+
+    // Log transaction in `transactions` collection
+    await addDoc(transactionRef, {
+      uid: userStore.getUser.uid,
+      type: 'credit',
+      amount: enteredAmount,
+      createdAt: Timestamp.now(),
+    });
+
+    toast.add({
+      title: 'Payment Successful',
+      description: `Your account has been credited with ₦${enteredAmount.toLocaleString()}.`,
+      color: 'green',
+    });
+
+    // Emit close event to notify parent
+    emit('close-modal');
+  } catch (error) {
+    console.error("Error processing payment:", error);
+    toast.add({
+      title: 'Transaction Failed',
+      description: 'An error occurred while processing your request. Please try again later.',
+      color: 'red',
+    });
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-
 </style>

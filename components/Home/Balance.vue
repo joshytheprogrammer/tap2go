@@ -12,7 +12,7 @@
       </p>
     </div>
     <UModal v-model="isOpen">
-      <AppMakePayment />
+      <AppMakePayment @close-modal="isOpen = false" />
     </UModal>
   </section>
 </template>
