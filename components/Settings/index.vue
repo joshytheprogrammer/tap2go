@@ -47,7 +47,7 @@ const userStore = useUserStore();
 
 const profilePicture = ref('');
 const userName = ref('Loading...');
- const hasUnreadNotifications = ref(false);
+const hasUnreadNotifications = ref(false);
 
 const menuOptions = ref([
   { label: "Request New Card", url: 'request-card' },

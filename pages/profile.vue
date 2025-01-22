@@ -54,7 +54,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useUserStore } from '@/store/user';
 import { ChevronLeftIcon, BellIcon } from '@heroicons/vue/24/outline';
 
- const hasUnreadNotifications = ref(false);
+const hasUnreadNotifications = ref(false);
 
 const db = useFirestore();
 const userStore = useUserStore();

@@ -6,6 +6,7 @@ export const useUserStore = defineStore('user', {
       
     },
     userBalance: 0,
+    profilePic: '',
     auth: {
       isAuthenticated: useCookie('isAuthenticated').value || false,
       uid: useCookie('uid').value || ''
@@ -26,6 +27,9 @@ export const useUserStore = defineStore('user', {
     async setUserBalance(balance) {
       this.userBalance = balance
     },
+    async setUserProfile(pic) {
+      this.profilePic = pic
+    },
     async clearUser() {
       useCookie('user').value = null
       useCookie('isAuthenticated').value = false
@@ -41,6 +45,7 @@ export const useUserStore = defineStore('user', {
     getUser: (state) => state.auth.uid,
     getUserData: (state) => state.user,
     isAuthenticated: (state) => state.auth.isAuthenticated,
-    getBalance: (state) => state.userBalance
+    getBalance: (state) => state.userBalance,
+    getProfilePic: (state) => state.profilePic
   }
 })

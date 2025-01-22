@@ -13,11 +13,13 @@
         <BellIcon class="size-5" />
       </button>
       <!-- Will only display if there is a notification that is marked as unread. -->
-      <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+      <span v-if="hasUnreadNotifications" class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { BellIcon } from '@heroicons/vue/24/outline'
+import { BellIcon } from '@heroicons/vue/24/outline';
+
+const hasUnreadNotifications = ref(false);
 </script>
