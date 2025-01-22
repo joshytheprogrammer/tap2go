@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-gray-900 text-black">
-    <main class="w-full max-w-md mx-auto">
+  <div class="bg-gray-800 text-black">
+    <main class="w-full min-h-screen max-w-md mx-auto">
       <NuxtPage  />
       <UNotifications />
     </main>

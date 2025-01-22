@@ -13,6 +13,7 @@ html,
 body {
   overflow-x: hidden;
   font-family: 'Poppins', 'Josfine Sans';
+  /* zoom: 0.95; */
 }
 
 button[disabled] {
@@ -29,6 +30,7 @@ select {
 input, textarea {
   background-color: transparent;
 }
+
 
 /* ::-webkit-scrollbar {
   width: 4px;

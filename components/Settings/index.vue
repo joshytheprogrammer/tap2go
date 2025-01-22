@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full min-h-screen ">
+  <div class="w-full h-screen overflow-y-auto">
     <!-- Header -->
     <div class="flex justify-between items-center p-4 border-b border-gray-300 bg-white">
       <button class="rounded-full p-2 bg-gray-200" @click="$router.go(-1)">
@@ -17,24 +17,30 @@
     </div>
 
     <!-- Profile Section -->
-    <div class="flex flex-col items-center mt-6">
+    <div class="flex flex-col items-center pt-6">
       <img :src="profilePicture" alt="Profile" class="w-28 h-28 rounded-full border-2 border-gray-300">
       <p class="text-blue-600 text-xl font-semibold mt-2 ">{{ userName }}</p>
     </div>
 
+    <!-- <div class="">
+      <HomeBalance />
+      <HomeSummary />
+      <HomeRecent />
+    </div> -->
+
     <!-- Menu Options -->
-    <div class="mt-8 space-y-3 px-4">
+    <div class="py-8 mb-16 space-y-3 px-4 block">
       <button @click="navigateTo('/profile')" class="w-full bg-blue-600 text-white p-4 rounded-lg text-center font-semibold flex justify-between items-center">
         Manage Profile
         <ChevronRightIcon class="size-5 text-white" />
       </button>
-      <div v-for="option in menuOptions" :key="option.label" @click="navigateTo(option.url)" class="flex justify-between items-center p-4 border-b border-gray-200 cursor-pointer rounded-lg text-gray-700 hover:text-white hover:bg-blue-600">
+      <button v-for="option in menuOptions" :key="option.label" @click="navigateTo(option.url)" class="flex justify-between items-center w-full p-4 border-b border-gray-200 cursor-pointer rounded-lg text-gray-700 hover:text-white hover:bg-blue-600">
         <p class="">{{ option.label }}</p>
         <ChevronRightIcon class="size-5" />
-      </div>
+      </button>
       <AppLogoutButton />
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup>

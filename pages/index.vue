@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-100">
     <AppNavGeneral />
     
-    <div class=" mb-16">
+    <div class="">
       <HomeBalance />
       <HomeSummary />
       <HomeRecent />
@@ -13,7 +13,6 @@
 </template>
 
 <script setup>
-
 definePageMeta({
   middleware: ['auth']
 });

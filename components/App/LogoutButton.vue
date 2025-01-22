@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <button @click="isOpen = true" class="w-full flex justify-between items-center p-4 border-b border-gray-200 cursor-pointer rounded-lg text-gray-700 hover:text-white hover:bg-red-600">
-      Logout
-      <ChevronRightIcon class="size-5" />
-    </button>
-
+  <div class="">
     <UModal v-model="isOpen">
       <div class="py-12 px-4">
         <div class="flex flex-col justify-center items-center text-center gap-4">
@@ -21,6 +16,12 @@
         </div>
       </div>
     </UModal>
+
+    <button @click="isOpen = true" class="w-full flex justify-between items-center p-4 border-b border-gray-200 cursor-pointer rounded-lg text-gray-700 hover:text-white hover:bg-red-600">
+      <p>Logout</p>
+      <ChevronRightIcon class="size-5" />
+    </button>
+
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="min-h-screen bg-gray-100 ">
     <Settings />
     <AppBottom />
   </div>
@@ -9,4 +9,6 @@
 definePageMeta({
   middleware: ['auth']
 });
+import { ChevronLeftIcon, BellIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
+const hasUnreadNotifications = ref(false);
 </script>
