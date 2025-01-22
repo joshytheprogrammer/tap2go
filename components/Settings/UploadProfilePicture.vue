@@ -82,7 +82,7 @@ const generateSignature = async (folder, timestamp) => {
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
 
-  const apiSecret = useRuntimeConfig().public.cloudinarySecret;
+  const apiSecret = useRuntimeConfig().cloudinarySecret;
   const signatureString = `${serializedParams}${apiSecret}`;
   
   const encoder = new TextEncoder();

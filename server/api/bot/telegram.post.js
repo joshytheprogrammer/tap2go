@@ -1,15 +1,31 @@
 import TelegramBot from 'node-telegram-bot-api';
 import useFirebaseServer from '@/composables/useFirebaseServer.js';
+import { useRuntimeConfig } from '#imports';
 
 const { db } = useFirebaseServer();
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN);
+const config = useRuntimeConfig();
+
+const bot = new TelegramBot(config.telegramBotToken);
 
 // Initialize error logging collection
 const errorLogs = db.collection('telegramBotErrorLogs');
 
-// Configure webhook
-const webhookUrl = process.env.TELEGRAM_API_DOMAIN;
+// Add verification before setting webhook
+if (!config.telegramBotToken || !config.telegramApiDomain) {
+  throw createError({
+    statusCode: 500,
+    message: 'Missing Telegram configuration'
+  });
+}
+
+// Configure webhook using runtime config
+const webhookUrl = config.telegramApiDomain;
 bot.setWebHook(webhookUrl);
+
+// Add health check endpoint
+bot.onText(/\/ping/, (msg) => {
+  bot.sendMessage(msg.chat.id, '🏓 Pong! Webhook active');
+});
 
 // Cache frequently accessed documents
 const userProfileCache = new Map();
@@ -143,6 +159,8 @@ bot.onText(/\/start/, async (msg) => {
 
 // Handle inline button callbacks
 bot.on('callback_query', async (callbackQuery) => {
+  await bot.answerCallbackQuery(callbackQuery.id);
+
   const chatId = callbackQuery.message.chat.id;
   const telegramUserId = callbackQuery.from.id;
   const data = callbackQuery.data;
@@ -302,6 +320,7 @@ function safeStringify(obj) {
 
 // Clear Pending Updates
 // curl -X POST "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/deleteWebhook?drop_pending_updates=true"
+// curl -X POST "https://api.telegram.org/bot8053185040:AAHEL2UKOETvA84Fg_nn_021H33Qa-1-9vI/deleteWebhook?drop_pending_updates=true"
 
 // Set Webhook Properly
 // curl -X POST \
@@ -309,5 +328,14 @@ function safeStringify(obj) {
 //   -d '{"url": "https://tap2go.joshytheprogrammer.com/api/bot/telegram"}' \
 //   "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/setWebhook"
 
+// Test
+// curl -X POST \
+//   -H "Content-Type: application/json" \
+//   -d '{"url": "https://a64a-102-89-69-192.ngrok-free.app/api/bot/telegram"}' \
+//   "https://api.telegram.org/bot8053185040:AAHEL2UKOETvA84Fg_nn_021H33Qa-1-9vI/setWebhook"
+
 // Verify Webhook Again
 // curl "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/getWebhookInfo"
+
+// Test
+// curl "https://api.telegram.org/bot8053185040:AAHEL2UKOETvA84Fg_nn_021H33Qa-1-9vI/getWebhookInfo"
