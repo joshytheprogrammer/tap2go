@@ -213,6 +213,7 @@ bot.on('callback_query', async (callbackQuery) => {
   }
 });
 
+
 // Firebase data functions
 async function fetchRecentTransactions(userUID, limit = 10) {
   try {
@@ -295,3 +296,18 @@ function safeStringify(obj) {
     return 'unserializable-value';
   }
 }
+
+// Verify Owner
+// curl "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/getMe"
+
+// Clear Pending Updates
+// curl -X POST "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/deleteWebhook?drop_pending_updates=true"
+
+// Set Webhook Properly
+// curl -X POST \
+//   -H "Content-Type: application/json" \
+//   -d '{"url": "https://tap2go.joshytheprogrammer.com/api/bot/telegram"}' \
+//   "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/setWebhook"
+
+// Verify Webhook Again
+// curl "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/getWebhookInfo"
