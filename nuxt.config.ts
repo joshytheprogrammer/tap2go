@@ -12,10 +12,11 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      baseUrl: ''
+      baseUrl: '',
+      cloudinarySecret: ''
     },
     callbackUrl: '',
-    googleApplicationCredentials: ''
+    googleApplicationCredentials: '',
   },
   vuefire: {
     auth: {
