@@ -16,11 +16,7 @@
       >
         <!-- Icon -->
         <div class="flex gap-4">
-          <img 
-            src="https://randomuser.me/api/portraits/men/1.jpg" 
-            alt="Transaction Icon" 
-            class="w-12 h-12 rounded-full"
-          />
+          <!-- <AppUserProfilePicture width="12" height="12" /> -->
 
           <!-- Details -->
           <div class="flex flex-col">

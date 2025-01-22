@@ -2,11 +2,7 @@
   <div class="sticky top-0 bg-white shadow-md flex items-center justify-between p-4">
     <!-- Profile Section -->
     <div @click="navigateTo('profile')" class="flex items-center gap-2 cursor-pointer">
-      <img 
-        src="https://randomuser.me/api/portraits/men/1.jpg" 
-        alt="Profile" 
-        class="w-10 h-10 rounded-full"
-      />
+      <AppUserProfilePicture width="10" height="10" />
     </div>
 
     <NuxtLink to="/" class="text-2xl text-gray-800 cursor-pointer uppercase font-semibold">Tap2Go</NuxtLink>
