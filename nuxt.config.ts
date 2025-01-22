@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseUrl: '',
-      cloudinarySecret: ''
+      cloudinarySecret: process.env.CLOUDINARY_SECRET
     },
     callbackUrl: '',
     googleApplicationCredentials: '',

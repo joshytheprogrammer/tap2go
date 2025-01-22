@@ -9,13 +9,13 @@
         <div>
           <label class="block text-sm font-medium leading-6 ">Matric Number</label>
           <div class="mt-2">
-            <input type="text" autocomplete="matric" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800 text-black text-xs sm:text-sm sm:leading-6 " v-model="user.matric" placeholder="Enter your matric number">
+            <input type="text" autocomplete="matric" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800  text-xs sm:text-sm sm:leading-6 " v-model="user.matric" placeholder="Enter your matric number">
           </div>
         </div>
         <div>
           <label class="block text-sm font-medium leading-6 ">Email Address</label>
           <div class="mt-2">
-            <input type="email" autocomplete="email" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800 text-black text-xs sm:text-sm sm:leading-6 " v-model="user.email" placeholder="Enter your email address">
+            <input type="email" autocomplete="email" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800 text-xs sm:text-sm sm:leading-6 " v-model="user.email" placeholder="Enter your email address">
           </div>
         </div>
         <div>
