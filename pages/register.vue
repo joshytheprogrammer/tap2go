@@ -21,7 +21,7 @@
         <div>
           <label class="block text-sm font-medium leading-6 ">Password</label>
           <div class="mt-2">
-            <input type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800 text-black text-xs sm:text-sm sm:leading-6 " v-model="user.password" placeholder="Enter your password">
+            <input type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800  text-xs sm:text-sm sm:leading-6 " v-model="user.password" placeholder="Enter your password">
           </div>
         </div>
 
@@ -73,7 +73,6 @@
 </template>
 
 <script setup>
-
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -96,9 +95,21 @@ const user = reactive({
   password: ''
 });
 
+// Function to validate CU matric number
+function validateMatric(matric) {
+  // Regex to match the strict format: YYLLNNNNNN
+  const matricRegex = /^\d{2}[A-Za-z]{2}\d{6}$/;
+  return matricRegex.test(matric);
+}
+
 async function register() {
   if (!validateEmail(user.email)) {
     toast.add({ title: 'Invalid email', description: 'Email must be a valid CU email (e.g., @stu.cu.edu.ng).', color: 'red' });
+    return;
+  }
+
+  if (!validateMatric(user.matric)) {
+    toast.add({ title: 'Invalid matric number', description: 'Matric number must be in the format YYLLNNNNNN (e.g., 22CH032034).', color: 'red' });
     return;
   }
 
@@ -144,5 +155,4 @@ async function register() {
 function validateEmail(email) {
   return email.endsWith('cu.edu.ng');
 }
-
 </script>
