@@ -21,7 +21,13 @@
         <div>
           <label class="block text-sm font-medium leading-6 ">Password</label>
           <div class="mt-2">
-            <input type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800  text-xs sm:text-sm sm:leading-6 " v-model="user.password" placeholder="Enter your password">
+            <input type="password" autocomplete="new-password" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800  text-xs sm:text-sm sm:leading-6 " v-model="user.password" placeholder="Enter your password">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium leading-6 ">Confirm Password</label>
+          <div class="mt-2">
+            <input type="password" autocomplete="new-password" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800  text-xs sm:text-sm sm:leading-6 " v-model="user.confirmPassword" placeholder="Confirm your password">
           </div>
         </div>
 
@@ -84,25 +90,28 @@ definePageMeta({
 });
 
 const firebaseAuth = useFirebaseAuth();
-
 const toast = useToast();
-
 const loading = ref(false);
 
 const user = reactive({
   matric: '',
   email: '',
-  password: ''
+  password: '',
+  confirmPassword: ''
 });
 
-// Function to validate CU matric number
 function validateMatric(matric) {
-  // Regex to match the strict format: YYLLNNNNNN
   const matricRegex = /^\d{2}[A-Za-z]{2}\d{6}$/;
   return matricRegex.test(matric);
 }
 
 async function register() {
+  // Validate password match first
+  if (user.password !== user.confirmPassword) {
+    toast.add({ title: 'Password mismatch', description: 'Password and confirm password must match', color: 'red' });
+    return;
+  }
+
   if (!validateEmail(user.email)) {
     toast.add({ title: 'Invalid email', description: 'Email must be a valid CU email (e.g., @stu.cu.edu.ng).', color: 'red' });
     return;
@@ -116,16 +125,15 @@ async function register() {
   loading.value = true;
 
   const status = await validatePassword(firebaseAuth, user.password);
-
   if (!status.isValid) {
     toast.add({ title: 'Invalid password', description: 'Password did not meet minimum requirements', color: 'red' });
+    loading.value = false;
     return;
   }
 
   try {
     const credential = await createUserWithEmailAndPassword(firebaseAuth, user.email, user.password);
-
-    // Create user in the backend
+    
     await $fetch('/api/auth/register', {
       method: "POST",
       body: {
@@ -136,16 +144,12 @@ async function register() {
     });
 
     await sendEmailVerification(credential.user);
-    toast.add({
-      title: 'Verification email sent',
-      description: 'Please check your email and verify your account.',
-    });
-
+    toast.add({ title: 'Verification email sent', description: 'Please check your email to verify your account.' });
     toast.add({ title: 'Account created successfully', description: 'Welcome to Tap2Go for Covenant University! Login to continue' });
 
     navigateTo('/login');
   } catch (error) {
-    toast.add({ title: 'An error occurred', description: error.code, color: 'red' });
+    toast.add({ title: 'Registration failed', description: error.message, color: 'red' });
     console.error(error);
   } finally {
     loading.value = false;
