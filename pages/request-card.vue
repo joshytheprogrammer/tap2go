@@ -56,7 +56,7 @@ const db = useFirestore();
 const userStore = useUserStore();
 const toast = useToast();
 
-const hasUnreadNotifications = ref(true);
+ const hasUnreadNotifications = ref(false);
 const hall = ref('');
 const room = ref('');
 const loading = ref(false);

@@ -46,7 +46,7 @@
 <script setup>
 import { ChevronLeftIcon, BellIcon } from '@heroicons/vue/24/outline';
 
-const hasUnreadNotifications = ref(true);
+ const hasUnreadNotifications = ref(false);
 
 
 </script>

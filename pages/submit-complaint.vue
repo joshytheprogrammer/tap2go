@@ -49,7 +49,7 @@ const db = useFirestore();
 const userStore = useUserStore();
 const toast = useToast();
 
-const hasUnreadNotifications = ref(true);
+ const hasUnreadNotifications = ref(false);
 const loading = ref(false);
 
 const complaint = ref('');

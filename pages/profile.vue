@@ -18,20 +18,8 @@
 
     <div class=" flex flex-col items-center px-4 py-6 " v-if="!loading" >
       <!-- Profile Picture -->
-      <div class="flex flex-col items-center mb-6">
-        <img
-          :src="profilePictureUrl"
-          alt="Profile Picture"
-          class="w-24 h-24 rounded-full object-cover"
-        />
-        <button
-          @click="changePicture"
-          class="text-blue-600 text-sm mt-2 underline"
-        >
-          Change Picture
-        </button>
-      </div>
-
+      <SettingsUploadProfilePicture :profilePictureUrl="profilePictureUrl" />
+ 
       <!-- Form Fields -->
       <form @submit.prevent="saveProfile" class="w-full space-y-4">
         <div v-for="(field, index) in profileFields" :key="index" class="space-y-2">
@@ -66,7 +54,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useUserStore } from '@/store/user';
 import { ChevronLeftIcon, BellIcon } from '@heroicons/vue/24/outline';
 
-const hasUnreadNotifications = ref(true);
+ const hasUnreadNotifications = ref(false);
 
 const db = useFirestore();
 const userStore = useUserStore();
