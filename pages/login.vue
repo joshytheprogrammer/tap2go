@@ -59,7 +59,7 @@
 
       <p class="mt-8 text-center text-sm text-gray-500">
         Don't have an account?
-        <NuxtLink to="/register" class="font-semibold leading-6 text-primary-600 hover:text-primary-700">Register</NuxtLink>
+        <NuxtLink to="/register" class="font-medium leading-6 text-primary-500 hover:text-primary-700">Register</NuxtLink>
       </p>
     </div>
   </section>
