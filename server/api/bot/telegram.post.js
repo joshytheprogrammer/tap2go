@@ -314,28 +314,3 @@ function safeStringify(obj) {
     return 'unserializable-value';
   }
 }
-
-// Verify Owner
-// curl "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/getMe"
-
-// Clear Pending Updates
-// curl -X POST "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/deleteWebhook?drop_pending_updates=true"
-// curl -X POST "https://api.telegram.org/bot8053185040:AAHEL2UKOETvA84Fg_nn_021H33Qa-1-9vI/deleteWebhook?drop_pending_updates=true"
-
-// Set Webhook Properly
-// curl -X POST \
-//   -H "Content-Type: application/json" \
-//   -d '{"url": "https://tap2go.joshytheprogrammer.com/api/bot/telegram"}' \
-//   "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/setWebhook"
-
-// Test
-// curl -X POST \
-//   -H "Content-Type: application/json" \
-//   -d '{"url": "https://a64a-102-89-69-192.ngrok-free.app/api/bot/telegram"}' \
-//   "https://api.telegram.org/bot8053185040:AAHEL2UKOETvA84Fg_nn_021H33Qa-1-9vI/setWebhook"
-
-// Verify Webhook Again
-// curl "https://api.telegram.org/bot7790517612:AAFr_7rXuOLQB1lGYyH0LXXXDl5Yb3lcdFQ/getWebhookInfo"
-
-// Test
-// curl "https://api.telegram.org/bot8053185040:AAHEL2UKOETvA84Fg_nn_021H33Qa-1-9vI/getWebhookInfo"
