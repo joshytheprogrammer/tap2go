@@ -12,11 +12,11 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      baseUrl: ''
+      baseUrl: '',
+      cloudinarySecret: ''
     },
     telegramBotToken: '',
     telegramApiDomain: '',
-    cloudinarySecret: '',
     callbackUrl: '',
     googleApplicationCredentials: '',
   },

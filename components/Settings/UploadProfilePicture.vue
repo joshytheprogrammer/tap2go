@@ -75,6 +75,8 @@ const onFileChange = (event) => {
   }
 };
 
+
+
 const generateSignature = async (folder, timestamp) => {
   const paramsToSign = { folder, timestamp };
   const serializedParams = Object.entries(paramsToSign)
@@ -82,7 +84,7 @@ const generateSignature = async (folder, timestamp) => {
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
 
-  const apiSecret = useRuntimeConfig().cloudinarySecret;
+  const apiSecret = useRuntimeConfig().public.cloudinarySecret;
   const signatureString = `${serializedParams}${apiSecret}`;
   
   const encoder = new TextEncoder();
