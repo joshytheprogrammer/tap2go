@@ -54,6 +54,10 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useUserStore } from '@/store/user';
 import { ChevronLeftIcon, BellIcon } from '@heroicons/vue/24/outline';
 
+definePageMeta({
+  middleware: ['auth']
+});
+
 const hasUnreadNotifications = ref(false);
 
 const db = useFirestore();
