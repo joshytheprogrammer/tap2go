@@ -176,9 +176,11 @@
 <script setup>
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user'; // Not directly used but good practice
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 const router = useRouter();
 const toast = useToast();
+const firebaseAuth = useFirebaseAuth(); // Initialize Firebase Auth
 
 const selectedTab = ref(0); // 0 for Student, 1 for Driver
 const tabItems = [
@@ -206,6 +208,17 @@ const driverConfirmPassword = ref('');
 const driverLoading = ref(false);
 const driverError = ref(null);
 
+// Validation function for student matric number (from your example)
+function validateStudentMatric(matric) {
+  const matricRegex = /^\d{2}[A-Za-z]{2}\d{6}$/; // e.g., 22CH032034
+  return matricRegex.test(matric);
+}
+
+// Validation function for student email (from your example)
+function validateStudentEmail(email) {
+  return email.endsWith('cu.edu.ng');
+}
+
 const handleStudentRegister = async () => {
   studentLoading.value = true;
   studentError.value = null;
@@ -216,33 +229,63 @@ const handleStudentRegister = async () => {
     return;
   }
 
-  try {
-    const response = await $fetch('/api/auth/register', { // Existing student registration endpoint
-      method: 'POST',
-      body: {
-        name: studentName.value,
-        matricNumber: studentMatricNumber.value.toUpperCase(),
-        email: studentEmail.value,
-        cardSerialNumber: studentCardSerialNumber.value,
-        password: studentPassword.value,
-      },
-    });
+  if (!validateStudentMatric(studentMatricNumber.value)) {
+    studentError.value = 'Invalid matric number. Expected format: e.g., 22CH032034. Please check your input.';
+    // Consider updating the input placeholder to match this format.
+    studentLoading.value = false;
+    return;
+  }
 
-    // Assuming server returns a success status or specific body structure
-    // For this example, let's assume a successful response means navigation
-    // You might need to adjust based on your actual API response
-    if (response && response.uid) { // Check if response indicates success (e.g., contains UID)
-        toast.add({ title: 'Student Registration Successful', description: 'Please login to continue.', color: 'green' });
-        router.push('/login'); // Redirect to the main login page (which now has tabs)
+  if (!validateStudentEmail(studentEmail.value)) {
+    studentError.value = 'Invalid email. Student email must be a valid CU email (e.g., example@stu.cu.edu.ng).';
+    studentLoading.value = false;
+    return;
+  }
+
+  try {
+    // Step 1: Create user with Firebase Authentication
+    const credential = await createUserWithEmailAndPassword(firebaseAuth, studentEmail.value, studentPassword.value);
+
+    if (credential && credential.user) {
+      // Step 2: Call your custom backend to store additional student details
+      // Note: Password is not sent here; it's managed by Firebase.
+      // Your backend should be adapted to receive 'uid' instead of 'password'.
+      await $fetch('/api/auth/register', {
+        method: 'POST',
+        body: {
+          uid: credential.user.uid, // Firebase User ID
+          name: studentName.value,
+          matricNumber: studentMatricNumber.value.toUpperCase(),
+          email: studentEmail.value, // Email is part of Firebase auth but can be stored for convenience
+          cardSerialNumber: studentCardSerialNumber.value,
+        },
+      });
+
+      // Step 3: Send email verification
+      await sendEmailVerification(credential.user);
+
+      toast.add({ title: 'Registration Successful!', description: 'A verification email has been sent. Please check your inbox and verify your email before logging in.', color: 'green', timeout: 7000 });
+      router.push('/login'); // Redirect to login page
     } else {
-        // Handle cases where API indicates an error but doesn't throw an HTTP error
-        studentError.value = response.message || 'Student registration failed. Please try again.';
+      // This case should ideally not be reached if createUserWithEmailAndPassword throws an error for failures
+      studentError.value = 'Student registration failed during user creation.';
     }
 
   } catch (err) {
     console.error('Student Registration error:', err);
-    if (err.data && err.data.message) { // Nuxt $fetch error structure
-      studentError.value = err.data.message;
+    if (err.code) { // Firebase specific errors
+      switch (err.code) {
+        case 'auth/email-already-in-use':
+          studentError.value = 'This email address is already registered.';
+          break;
+        case 'auth/weak-password':
+          studentError.value = 'The password is too weak. It should be at least 6 characters long.';
+          break;
+        default:
+          studentError.value = err.message || 'An error occurred during registration.';
+      }
+    } else if (err.data && err.data.message) { // Error from your $fetch call
+      studentError.value = `Backend Error: ${err.data.message}`;
     } else if (err.message) {
       studentError.value = err.message;
     } else {
@@ -296,9 +339,6 @@ const handleDriverRegister = async () => {
   driverLoading.value = false;
 };
 
-// definePageMeta({
-//   middleware: ['auth'] // Apply auth middleware to redirect if already logged in
-// });
 </script>
 
 <style scoped>
