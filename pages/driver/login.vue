@@ -139,7 +139,7 @@ const handleLogin = async () => {
           role: driverUserDocSnap.data().role || 'driver'
         };
 
-        userStore.setUser(user.uid); // Set auth state (uid, isAuthenticated via cookie/store action)
+        userStore.setUser({uid: user.uid, role: 'driver'}); // Set auth state (uid, isAuthenticated via cookie/store action)
         userStore.setUserData(driverData); // Set detailed user profile data
 
         toast.add({

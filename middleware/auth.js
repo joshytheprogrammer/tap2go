@@ -4,7 +4,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   const userStore = useUserStore();
 
   const authenticated = userStore.isAuthenticated;
-  const userRole = userStore.user?.role; // Assuming role is stored in user object
+  const userRole = userStore.getRole; // Assuming role is stored in user object
 
   // Driver routes
   if (to.path.startsWith('/driver')) {
@@ -26,21 +26,27 @@ export default defineNuxtRouteMiddleware((to, from) => {
     }
   }
   // Student/General routes
-  else {
+  else { // Path does not start with /driver
     if (authenticated) {
-      if (userRole === 'driver' && (to.path === '/login' || to.path === '/register')) {
-        // Authenticated driver trying to access student login/register
-        return navigateTo('/driver/dashboard'); // Or driver home
+      if (userRole === 'driver') {
+        // Authenticated driver trying to access any non-driver page.
+        // Redirect them to their dashboard.
+        return navigateTo('/driver/dashboard');
+      } else { // Authenticated non-driver (e.g., student)
+        if (to.path === '/login' || to.path === '/register') {
+          // Authenticated student trying to access student login/register pages.
+          return navigateTo('/'); // Redirect to student home
+        }
+        // Authenticated student accessing other general pages: allow.
       }
-      if (userRole !== 'driver' && (to.path === '/login' || to.path === '/register')) {
-        // Authenticated student trying to access student login/register
-        return navigateTo('/');
-      }
-    } else {
-      // Not authenticated, trying to access a protected student page
-      if (to.path !== '/login' && to.path !== '/register' && !to.path.startsWith('/driver')) {
+    } else { // Not authenticated
+      // Not authenticated, trying to access a protected student page.
+      // A protected student page is any page not /login, /register.
+      // The check !to.path.startsWith('/driver') is implicit due to the outer else.
+      if (to.path !== '/login' && to.path !== '/register') {
         return navigateTo('/login');
       }
+      // If not authenticated and trying to access /login or /register: allow.
     }
   }
 });

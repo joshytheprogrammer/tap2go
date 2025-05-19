@@ -137,7 +137,7 @@ const handleStudentLogin = async () => {
           ...(userProfileSnap.exists() ? userProfileSnap.data() : {}), // Contains other profile details
           role: userDocSnap.data().role || 'student' // Default role if not present
         };
-        userStore.setUser(user.uid); // Set auth state (uid, isAuthenticated via cookie/store action)
+        userStore.setUser({uid: user.uid, role: 'student'}); // Set auth state (uid, isAuthenticated via cookie/store action)
         userStore.setUserData(userData); // Set detailed user profile data
         toast.add({ title: 'Login Successful', description: 'Welcome back!', color: 'green' });
         router.push('/'); // Redirect to student dashboard
@@ -199,7 +199,7 @@ const handleDriverLogin = async () => {
           ...(driverProfileDocSnap.exists() ? driverProfileDocSnap.data() : {}), // Contains other profile details
           role: driverUserDocSnap.data().role || 'driver' // Default role if not present
         };
-        userStore.setUser(user.uid); // Set auth state (uid, isAuthenticated via cookie/store action)
+        userStore.setUser({uid: user.uid, role: 'driver'}); // Set auth state (uid, isAuthenticated via cookie/store action)
         userStore.setUserData(driverData); // Set detailed user profile data
         toast.add({ title: 'Login Successful', description: 'Welcome back, Driver!', color: 'green' });
         router.push('/driver/dashboard'); // Redirect to driver dashboard
