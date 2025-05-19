@@ -32,10 +32,11 @@ if (getApps().length === 0) {
 }
 
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 export default function useFirebaseServer() {
   return {
     db,
-    getAuth
+    auth
   };
 }

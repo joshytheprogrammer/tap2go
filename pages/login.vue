@@ -1,126 +1,222 @@
 <template>
-  <section class="min-h-screen bg-blue-950 w-full py-8 px-4 text-white ">
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <h2 class="my-8 text-center text-2xl font-semibold tracking-tight ">Login to your Account </h2>
-    </div>
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
 
-    <div class="mt-10 w-full sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" @submit.prevent="login">
-        <div>
-          <label class="block text-sm font-medium leading-6 ">Email</label>
-          <div class="mt-2 ">
-            <input type="text" autocomplete="email" required class="block w-full rounded-md border-0 p-4 shadow-sm outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800 text-xs sm:text-sm sm:leading-6 " v-model="user.email" placeholder="Enter your email address">
-          </div>
-        </div>
-        <div>
-          <label class="block text-sm font-medium leading-6 ">Password</label>
-          <div class="mt-2">
-            <input type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 p-4  outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-800 text-xs sm:text-sm sm:leading-6 " v-model="user.password" placeholder="Enter your password">
-          </div>
-        </div>
-        <div>
-          <button
-            type="submit"
-            class="flex w-full justify-center rounded-md bg-primary-800 px-3 py-4 md:py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary-700 dark:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-800"
-            v-if="!loading"
-          >
-            Login
-          </button>
-          <button
-            type="button"
-            class="flex w-full justify-center items-center rounded-md bg-primary-800 px-3 py-4 md:py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary-700 dark:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-800 cursor-not-allowed " 
-            disabled
-            v-else
-          >
-            <svg
-              class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                class="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                stroke-width="4"
-              ></circle>
-              <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.86 3 7.978l3-2.687z"
-              ></path>
-            </svg>
-            Checking...
-          </button>
-        </div>
-      </form>
+      <UTabs :items="tabItems" v-model="selectedTab" />
 
-      <p class="mt-8 text-center text-sm text-gray-500">
-        Don't have an account?
-        <NuxtLink to="/register" class="font-medium leading-6 text-primary-500 hover:text-primary-700">Register</NuxtLink>
-      </p>
+      <div class="mt-6">
+        <div v-if="selectedTab === 0"> <!-- Student Login -->
+          <form @submit.prevent="handleStudentLogin">
+            <div class="mb-4">
+              <label for="student-email" class="block text-sm font-medium text-gray-700">Email</label>
+              <UInput
+                id="student-email"
+                v-model="studentEmail"
+                type="email"
+                required
+                placeholder="Enter your email"
+                class="mt-1 block w-full"
+              />
+            </div>
+            <div class="mb-6">
+              <label for="student-password" class="block text-sm font-medium text-gray-700">Password</label>
+              <UInput
+                id="student-password"
+                v-model="studentPassword"
+                type="password"
+                required
+                placeholder="Enter your password"
+                class="mt-1 block w-full"
+              />
+            </div>
+            <UButton type="submit" label="Login as Student" color="primary" block :loading="studentLoading" />
+            <div v-if="studentError" class="mt-4 text-red-500 text-sm text-center">
+              {{ studentError }}
+            </div>
+          </form>
+          <p class="mt-6 text-center text-sm text-gray-600">
+            Don't have a student account? 
+            <NuxtLink to="/register" class="font-medium text-indigo-600 hover:text-indigo-500">Register here</NuxtLink>
+          </p>
+        </div>
+
+        <div v-if="selectedTab === 1"> <!-- Driver Login -->
+          <form @submit.prevent="handleDriverLogin">
+            <div class="mb-4">
+              <label for="driver-identifier" class="block text-sm font-medium text-gray-700">License Plate or Email</label>
+              <UInput
+                id="driver-identifier"
+                v-model="driverIdentifier"
+                type="text"
+                required
+                placeholder="License plate or email"
+                class="mt-1 block w-full"
+              />
+            </div>
+            <div class="mb-6">
+              <label for="driver-password" class="block text-sm font-medium text-gray-700">Password</label>
+              <UInput
+                id="driver-password"
+                v-model="driverPassword"
+                type="password"
+                required
+                placeholder="Enter your password"
+                class="mt-1 block w-full"
+              />
+            </div>
+            <UButton type="submit" label="Login as Driver" color="primary" block :loading="driverLoading" />
+            <div v-if="driverError" class="mt-4 text-red-500 text-sm text-center">
+              {{ driverError }}
+            </div>
+          </form>
+          <p class="mt-6 text-center text-sm text-gray-600">
+            Don't have a driver account? 
+            <NuxtLink to="/driver/register" class="font-medium text-indigo-600 hover:text-indigo-500">Register here</NuxtLink>
+          </p>
+        </div>
+      </div>
+
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup>
-import { signInWithEmailAndPassword, signOut, validatePassword } from 'firebase/auth';
-import { useUserStore } from "@/store/user";
+import { ref } from 'vue';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { query, where, getDocs, collection, doc, getDoc } from 'firebase/firestore';
+import { useUserStore } from '@/store/user';
 
-definePageMeta({
-  middleware: ['auth']
-});
+const auth = useFirebaseAuth();
+const db = useFirestore();
 
+const router = useRouter();
 const userStore = useUserStore();
-const firebaseAuth = useFirebaseAuth();
 const toast = useToast();
 
-const loading = ref(false);
-const validated = ref(false);
+const selectedTab = ref(0); // 0 for Student, 1 for Driver
+const tabItems = [
+  { label: 'Student' },
+  { label: 'Driver' }
+];
 
-const user = reactive({
-  email: '',
-  password: ''
-});
+// Student login refs
+const studentEmail = ref('');
+const studentPassword = ref('');
+const studentLoading = ref(false);
+const studentError = ref(null);
 
-async function login() {
-  loading.value = true;
+// Driver login refs
+const driverIdentifier = ref('');
+const driverPassword = ref('');
+const driverLoading = ref(false);
+const driverError = ref(null);
 
-  const status = await validatePassword(firebaseAuth, user.password);
+const isEmail = (input) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
 
-  if (!status.isValid) {
-    toast.add({ title: 'Invalid password', description: 'Password did not meet minimum requirements', color: 'red' });
-    return;
+const handleStudentLogin = async () => {
+  studentLoading.value = true;
+  studentError.value = null;
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, studentEmail.value, studentPassword.value);
+    const user = userCredential.user;
+    if (user) {
+      // Fetch student-specific data (users and userProfile collections)
+      const userDocRef = doc(db, 'users', user.uid);
+      const userProfileRef = doc(db, 'userProfile', user.uid);
+      const [userDocSnap, userProfileSnap] = await Promise.all([getDoc(userDocRef), getDoc(userProfileRef)]);
+
+      if (userDocSnap.exists()) { // Student must exist in 'users' collection
+        const userData = {
+          uid: user.uid,
+          email: user.email,
+          ...userDocSnap.data(),
+          ...(userProfileSnap.exists() ? userProfileSnap.data() : {}),
+          role: userDocSnap.data().role || 'student' // Ensure role is set
+        };
+        userStore.setUser(userData);
+        userStore.isAuthenticated = true;
+        toast.add({ title: 'Login Successful', description: 'Welcome back!', color: 'green' });
+        router.push('/'); // Redirect to student dashboard
+      } else {
+        studentError.value = 'Student account not found. Please register or check your credentials.';
+        await auth.signOut(); // Sign out if DB record is missing
+      }
+    } else {
+      studentError.value = 'Login failed. Please check your credentials.';
+    }
+  } catch (err) {
+    console.error('Student Login error:', err);
+    if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+      studentError.value = 'Invalid email or password.';
+    } else {
+      studentError.value = 'An unexpected error occurred. Please try again.';
+    }
   }
+  studentLoading.value = false;
+};
+
+const handleDriverLogin = async () => {
+  driverLoading.value = true;
+  driverError.value = null;
+  let emailToLogin = driverIdentifier.value;
 
   try {
-    const credential = await signInWithEmailAndPassword(firebaseAuth, user.email, user.password);
-
-    if (!credential.user.emailVerified) {
-      // Sign the user out immediately
-      await signOut(firebaseAuth);
-      toast.add({
-        title: 'Email not verified',
-        description: 'Please verify your email before logging in.',
-        color: 'red',
-      });
-      return;
+    if (!isEmail(driverIdentifier.value)) {
+      const q = query(collection(db, 'drivers_users'), where('licensePlate', '==', driverIdentifier.value.toUpperCase()));
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+        driverError.value = 'Invalid license plate or email.';
+        driverLoading.value = false;
+        return;
+      }
+      emailToLogin = querySnapshot.docs[0].data().email;
     }
 
-    await userStore.setUser({ uid: credential.user.uid });
+    const userCredential = await signInWithEmailAndPassword(auth, emailToLogin, driverPassword.value);
+    const user = userCredential.user;
+    if (user) {
+      // Fetch driver-specific data (drivers_users and driversProfile collections)
+      const driverUserDocRef = doc(db, 'drivers_users', user.uid);
+      const driverProfileDocRef = doc(db, 'driversProfile', user.uid);
+      const [driverUserSnap, driverProfileSnap] = await Promise.all([getDoc(driverUserDocRef), getDoc(driverProfileDocRef)]);
 
-    toast.add({ title: 'Login successful', description: 'Welcome back!' });
-    
-    navigateTo('/');
-  } catch (error) {
-    toast.add({ title: 'Login failed', description: error.code, color: 'red' });
-    console.error(error);
-  } finally {
-    loading.value = false;
+      if (driverUserSnap.exists()) { // Driver must exist in 'drivers_users' collection
+        const driverData = {
+          uid: user.uid,
+          email: user.email, // Auth email
+          ...driverUserSnap.data(), // Collection email, licensePlate, role, etc.
+          ...(driverProfileSnap.exists() ? driverProfileSnap.data() : {}), // name, phone, etc.
+          role: driverUserSnap.data().role || 'driver' // Ensure role is set
+        };
+        userStore.setUser(driverData);
+        userStore.isAuthenticated = true;
+        toast.add({ title: 'Login Successful', description: 'Welcome back, Driver!', color: 'green' });
+        router.push('/driver/dashboard'); // Redirect to driver dashboard
+      } else {
+        driverError.value = 'Driver account not found. Please register or check your credentials.';
+        await auth.signOut(); // Sign out if DB record is missing
+      }
+    } else {
+      driverError.value = 'Login failed. Please check your credentials.';
+    }
+  } catch (err) {
+    console.error('Driver Login error:', err);
+    if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+      driverError.value = 'Invalid license plate/email or password.';
+    } else {
+      driverError.value = 'An unexpected error occurred. Please try again.';
+    }
   }
-}
+  driverLoading.value = false;
+};
 
+// definePageMeta({
+//   middleware: ['auth'] // Apply auth middleware to redirect if already logged in
+// });
 
 </script>
+
+<style scoped>
+/* Add any specific styles for the login page here */
+</style>
