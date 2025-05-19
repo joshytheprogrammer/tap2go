@@ -75,8 +75,6 @@ const onFileChange = (event) => {
   }
 };
 
-
-
 const generateSignature = async (folder, timestamp) => {
   const paramsToSign = { folder, timestamp };
   const serializedParams = Object.entries(paramsToSign)

@@ -1,5 +1,5 @@
-import { Timestamp } from 'firebase-admin/firestore'; // Added for Admin SDK
-import useFirebaseServer from '@/composables/useFirebaseServer.js'; // Changed import
+import { Timestamp } from 'firebase-admin/firestore';
+import useFirebaseServer from '@/composables/useFirebaseServer.js';
 
 export default defineEventHandler(async (event) => {
   try {
