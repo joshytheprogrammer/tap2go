@@ -30,7 +30,7 @@ import { ChevronRightIcon } from '@heroicons/vue/24/outline'
 import {
  signOut
 } from 'firebase/auth';
-import { useUserStore } from "@/store/user";
+import { useUserStore } from "~/stores/user";
 
 const isOpen = ref(false);
 

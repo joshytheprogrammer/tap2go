@@ -10,7 +10,6 @@
 
 <script setup>
 import { doc, onSnapshot } from 'firebase/firestore';
-import { useUserStore } from '@/store/user';
 
 // Define props for dynamic width and height
 const props = defineProps({
@@ -27,7 +26,7 @@ const props = defineProps({
 // Firestore setup
 const db = useFirestore();
 const userStore = useUserStore();
-const uid = userStore.getUser.uid;
+const uid = userStore.getUser;
 
 // Compute dynamic width and height classes based on props
 const widthClass = `w-${props.width}`;

@@ -43,7 +43,7 @@
 <script setup>
 import { ChevronLeftIcon, BellIcon } from '@heroicons/vue/24/outline';
 import { collection, addDoc } from 'firebase/firestore';
-import { useUserStore } from '@/store/user';
+
 
 const db = useFirestore();
 const userStore = useUserStore();
@@ -66,7 +66,7 @@ const submitComplaint = async () => {
 
     // Save the new request
     await addDoc(complaintsRef, {
-      uid: userStore.getUser.uid,
+      uid: userStore.getUser,
       message: complaint.value,
       timestamp: new Date()
     });

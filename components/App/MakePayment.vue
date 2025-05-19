@@ -49,7 +49,7 @@
 
 <script setup>
 import { doc, updateDoc, collection, addDoc, Timestamp } from 'firebase/firestore';
-import { useUserStore } from '@/store/user';
+
 
 const emit = defineEmits(['close-modal'])
 
@@ -79,7 +79,7 @@ const proceedNext = async () => {
       return;
     }
 
-    const userDocRef = doc(db, 'users', userStore.getUser.uid);
+    const userDocRef = doc(db, 'users', userStore.getUser);
     const transactionRef = collection(db, 'transactions');
 
     // Update user balance in `users` collection
@@ -89,7 +89,7 @@ const proceedNext = async () => {
 
     // Log transaction in `transactions` collection
     await addDoc(transactionRef, {
-      uid: userStore.getUser.uid,
+      uid: userStore.getUser,
       type: 'credit',
       amount: enteredAmount,
       createdAt: Timestamp.now(),

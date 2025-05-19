@@ -74,7 +74,7 @@ import {
   doc,
   getDoc,
 } from 'firebase/firestore';
-import { useUserStore } from '@/store/user';
+
 
 const auth = useFirebaseAuth();
 const db = useFirestore();
@@ -131,27 +131,27 @@ const handleLogin = async () => {
       const driverProfileDocSnap = await getDoc(driverProfileDocRef);
 
       if (driverUserDocSnap.exists() && driverProfileDocSnap.exists()) {
-        const userData = {
+        const driverData = {
           uid: user.uid,
           email: user.email,
           ...driverUserDocSnap.data(),
           ...driverProfileDocSnap.data(),
-          role: 'driver',
+          role: driverUserDocSnap.data().role || 'driver'
         };
 
-        userStore.setUser(userData);
-        userStore.isAuthenticated = true;
+        userStore.setUser(user.uid); // Set auth state (uid, isAuthenticated via cookie/store action)
+        userStore.setUserData(driverData); // Set detailed user profile data
 
         toast.add({
           title: 'Login Successful',
-          description: 'Welcome back, Driver!',
-          color: 'green',
+          description: 'Redirecting to dashboard...',
+          color: 'green'
         });
 
         router.push('/driver/dashboard');
       } else {
         error.value = 'Driver data not found. Please contact support.';
-        await auth.signOut();
+        await auth.signOut(); // Sign out if app-specific DB record is missing
       }
     } else {
       error.value = 'Login failed. Please check your credentials.';

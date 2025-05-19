@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { useUserStore } from '@/store/user';
+
 import { doc, updateDoc } from 'firebase/firestore';
 
 const props = defineProps(['profilePictureUrl']);
@@ -103,7 +103,7 @@ const uploadToCloudinary = async (formData) => {
 };
 
 const updateProfilePictureInFirestore = async (uploadedUrl) => {
-  const userDocRef = doc(db, 'userProfile', userStore.getUser.uid);
+  const userDocRef = doc(db, 'userProfile', userStore.getUser);
   await updateDoc(userDocRef, { profilePicture: uploadedUrl });
 };
 

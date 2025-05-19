@@ -85,7 +85,7 @@
 import { ref } from 'vue';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { query, where, getDocs, collection, doc, getDoc } from 'firebase/firestore';
-import { useUserStore } from '@/store/user';
+
 
 const auth = useFirebaseAuth();
 const db = useFirestore();
@@ -123,24 +123,24 @@ const handleStudentLogin = async () => {
     if (user) {
       // Fetch student-specific data (users and userProfile collections)
       const userDocRef = doc(db, 'users', user.uid);
-      const userProfileRef = doc(db, 'userProfile', user.uid);
+      const userProfileRef = doc(db, 'userProfile', user.uid); // Assuming 'userProfile' for students
       const [userDocSnap, userProfileSnap] = await Promise.all([getDoc(userDocRef), getDoc(userProfileRef)]);
 
       if (userDocSnap.exists()) { // Student must exist in 'users' collection
         const userData = {
           uid: user.uid,
-          email: user.email,
-          ...userDocSnap.data(),
-          ...(userProfileSnap.exists() ? userProfileSnap.data() : {}),
-          role: userDocSnap.data().role || 'student' // Ensure role is set
+          email: user.email, // Firebase auth email
+          ...userDocSnap.data(), // Contains role, matricNumber etc.
+          ...(userProfileSnap.exists() ? userProfileSnap.data() : {}), // Contains other profile details
+          role: userDocSnap.data().role || 'student' // Default role if not present
         };
-        userStore.setUser(userData);
-        userStore.isAuthenticated = true;
+        userStore.setUser(user.uid); // Set auth state (uid, isAuthenticated via cookie/store action)
+        userStore.setUserData(userData); // Set detailed user profile data
         toast.add({ title: 'Login Successful', description: 'Welcome back!', color: 'green' });
         router.push('/'); // Redirect to student dashboard
       } else {
-        studentError.value = 'Student account not found. Please register or check your credentials.';
-        await auth.signOut(); // Sign out if DB record is missing
+        studentError.value = 'Student account data not found. Please complete registration or contact support.';
+        await auth.signOut(); // Sign out if app-specific DB record is missing
       }
     } else {
       studentError.value = 'Login failed. Please check your credentials.';
@@ -166,46 +166,57 @@ const handleDriverLogin = async () => {
       const q = query(collection(db, 'drivers_users'), where('licensePlate', '==', driverIdentifier.value.toUpperCase()));
       const querySnapshot = await getDocs(q);
       if (querySnapshot.empty) {
-        driverError.value = 'Invalid license plate or email.';
+        driverError.value = 'Invalid license plate. If you meant to use email, please enter a valid email address.';
         driverLoading.value = false;
         return;
       }
-      emailToLogin = querySnapshot.docs[0].data().email;
+      const driverUserRecord = querySnapshot.docs[0].data();
+      if (!driverUserRecord.email) {
+          driverError.value = 'Email not found for the provided license plate. Please contact support.';
+          driverLoading.value = false;
+          return;
+      }
+      emailToLogin = driverUserRecord.email;
     }
 
     const userCredential = await signInWithEmailAndPassword(auth, emailToLogin, driverPassword.value);
     const user = userCredential.user;
+
     if (user) {
       // Fetch driver-specific data (drivers_users and driversProfile collections)
       const driverUserDocRef = doc(db, 'drivers_users', user.uid);
-      const driverProfileDocRef = doc(db, 'driversProfile', user.uid);
-      const [driverUserSnap, driverProfileSnap] = await Promise.all([getDoc(driverUserDocRef), getDoc(driverProfileDocRef)]);
+      const driverProfileDocRef = doc(db, 'driversProfile', user.uid); // Assuming 'driversProfile' for drivers
+      const [driverUserDocSnap, driverProfileDocSnap] = await Promise.all([getDoc(driverUserDocRef), getDoc(driverProfileDocRef)]);
 
-      if (driverUserSnap.exists()) { // Driver must exist in 'drivers_users' collection
+      if (driverUserDocSnap.exists()) { // Driver must exist in 'drivers_users'
         const driverData = {
           uid: user.uid,
-          email: user.email, // Auth email
-          ...driverUserSnap.data(), // Collection email, licensePlate, role, etc.
-          ...(driverProfileSnap.exists() ? driverProfileSnap.data() : {}), // name, phone, etc.
-          role: driverUserSnap.data().role || 'driver' // Ensure role is set
+          email: user.email, // Firebase auth email
+          ...driverUserDocSnap.data(), // Contains licensePlate, role etc.
+          ...(driverProfileDocSnap.exists() ? driverProfileDocSnap.data() : {}), // Contains other profile details
+          role: driverUserDocSnap.data().role || 'driver' // Default role if not present
         };
-        userStore.setUser(driverData);
-        userStore.isAuthenticated = true;
+        userStore.setUser(user.uid); // Set auth state (uid, isAuthenticated via cookie/store action)
+        userStore.setUserData(driverData); // Set detailed user profile data
         toast.add({ title: 'Login Successful', description: 'Welcome back, Driver!', color: 'green' });
         router.push('/driver/dashboard'); // Redirect to driver dashboard
       } else {
-        driverError.value = 'Driver account not found. Please register or check your credentials.';
-        await auth.signOut(); // Sign out if DB record is missing
+        driverError.value = 'Driver account data not found. Please complete registration or contact support.';
+        await auth.signOut(); // Sign out the user as their app-specific data is missing
       }
     } else {
+      // This case implies signInWithEmailAndPassword itself didn't throw for bad credentials but returned no user, which is unusual.
       driverError.value = 'Login failed. Please check your credentials.';
     }
   } catch (err) {
     console.error('Driver Login error:', err);
-    if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+    if (err.code === 'auth/user-not-found' ||
+        err.code === 'auth/wrong-password' ||
+        err.code === 'auth/invalid-credential' ||
+        err.code === 'auth/invalid-email') {
       driverError.value = 'Invalid license plate/email or password.';
     } else {
-      driverError.value = 'An unexpected error occurred. Please try again.';
+      driverError.value = 'An unexpected error occurred during driver login. Please try again.';
     }
   }
   driverLoading.value = false;

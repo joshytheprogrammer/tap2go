@@ -19,7 +19,7 @@
 
 <script setup>
 import { doc, onSnapshot } from 'firebase/firestore'; // Import `doc` instead of `collection` and `query`
-import { useUserStore } from "@/store/user"; // Import the user store
+import { useUserStore } from "~/stores/user"; // Import the user store
 
 const db = useFirestore(); // Firestore instance
 const userStore = useUserStore(); // User store
@@ -30,7 +30,7 @@ const toggleModal = () => {
   isOpen.value = !isOpen.value;
 };
 
-const userDocRef = doc(db, 'users', userStore.getUser.uid); 
+const userDocRef = doc(db, 'users', userStore.getUser); 
 
 const unsubscribe = onSnapshot(userDocRef, (userSnapshot) => {
   if (userSnapshot.exists()) { 

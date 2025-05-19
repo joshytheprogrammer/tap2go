@@ -50,7 +50,7 @@
 <script setup>
 import { ChevronLeftIcon, BellIcon } from '@heroicons/vue/24/outline';
 import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
-import { useUserStore } from '@/store/user';
+
 
 const db = useFirestore();
 const userStore = useUserStore();
@@ -72,7 +72,7 @@ const submitRequest = async () => {
     const cardRequestRef = collection(db, 'cardRequests');
 
     // Check if a request already exists for this user
-    const q = query(cardRequestRef, where('uid', '==', userStore.getUser.uid));
+    const q = query(cardRequestRef, where('uid', '==', userStore.getUser));
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
@@ -83,7 +83,7 @@ const submitRequest = async () => {
 
     // Save the new request
     await addDoc(cardRequestRef, {
-      uid: userStore.getUser.uid,
+      uid: userStore.getUser,
       hall: hall.value,
       room: room.value,
       timestamp: new Date()

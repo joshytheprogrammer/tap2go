@@ -45,7 +45,7 @@
 
 <script setup>
 import { doc, onSnapshot } from 'firebase/firestore';
-import { useUserStore } from '@/store/user';
+
 import { ChevronLeftIcon, BellIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
 
 const db = useFirestore();
@@ -63,7 +63,7 @@ const menuOptions = ref([
 
 // Fetch profile details in real-time
 const fetchUserProfile = () => {
-  const profileDocRef = doc(db, 'userProfile', userStore.getUser.uid);
+  const profileDocRef = doc(db, 'userProfile', userStore.getUser);
 
   const unsubscribe = onSnapshot(profileDocRef, (docSnap) => {
     if (docSnap.exists()) {

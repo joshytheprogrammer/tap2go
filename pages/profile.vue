@@ -34,7 +34,7 @@
             class="w-full px-4 py-3 border rounded-md text-gray-800 focus:outline-none focus:ring-2 disabled:bg-gray-200 focus:ring-blue-500 "
             :disabled="field.disabled"
           />
-          <a class="text-blue-600 text-sm mt-2 underline" v-if="field.name=='telegramAccount' && field.value.length == 0" :href="'https://t.me/tap2go_bot?start='+userStore.getUser.uid">Connect Telegram Account</a>
+          <a class="text-blue-600 text-sm mt-2 underline" v-if="field.name=='telegramAccount' && field.value.length == 0" :href="'https://t.me/tap2go_bot?start='+userStore.getUser">Connect Telegram Account</a>
         </div>
         <button
           type="submit"
@@ -51,7 +51,7 @@
 
 <script setup>
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { useUserStore } from '@/store/user';
+
 import { ChevronLeftIcon, BellIcon } from '@heroicons/vue/24/outline';
 
 definePageMeta({
@@ -75,7 +75,7 @@ const loading = ref(true);
 
 const fetchUserProfile = async () => {
   try {
-    const userDoc = doc(db, 'users', userStore.getUser.uid);
+    const userDoc = doc(db, 'users', userStore.getUser);
     const userSnapshot = await getDoc(userDoc);
     let userData = {};
     
@@ -83,7 +83,7 @@ const fetchUserProfile = async () => {
       userData = userSnapshot.data();
     }
     
-    const profileDoc = doc(db, 'userProfile', userStore.getUser.uid);
+    const profileDoc = doc(db, 'userProfile', userStore.getUser);
     const profileSnapshot = await getDoc(profileDoc);
     
     if (profileSnapshot.exists()) {
@@ -120,7 +120,7 @@ const saveProfile = async () => {
       return;
     }
 
-    const profileDoc = doc(db, 'userProfile', userStore.getUser.uid);
+    const profileDoc = doc(db, 'userProfile', userStore.getUser);
     await updateDoc(profileDoc,  { name: nameField.value });
     
     toast.add({title: 'Profile updated successfully'});

@@ -40,12 +40,12 @@
 
 <script setup>
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
-import { useUserStore } from '@/store/user';
+
 
 // Firestore setup
 const db = useFirestore();
 const userStore = useUserStore();
-const uid = userStore.getUser.uid;
+const uid = userStore.getUser;
 
 // State variables
 const transactions = ref([]);

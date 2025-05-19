@@ -9,6 +9,4 @@
 definePageMeta({
   middleware: ['auth']
 });
-import { ChevronLeftIcon, BellIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
-const hasUnreadNotifications = ref(false);
 </script>

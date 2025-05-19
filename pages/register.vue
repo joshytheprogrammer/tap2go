@@ -175,7 +175,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useUserStore } from '@/store/user'; // Not directly used but good practice
+ // Not directly used but good practice
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 const router = useRouter();

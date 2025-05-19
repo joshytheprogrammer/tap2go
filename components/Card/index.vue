@@ -50,7 +50,7 @@
 
 <script setup>
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
-import { useUserStore } from '@/store/user';
+
 
 const db = useFirestore();
 const userStore = useUserStore();
@@ -89,7 +89,7 @@ const saveCardStatus = async () => {
 };
 
 // Fetch user and card data in real-time
-const userDoc = doc(db, 'users', userStore.getUser.uid);
+const userDoc = doc(db, 'users', userStore.getUser);
   
 userUnsub = onSnapshot(userDoc, (userSnapshot) => {
   if (userSnapshot.exists()) {
