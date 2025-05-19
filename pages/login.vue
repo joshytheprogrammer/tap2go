@@ -84,6 +84,9 @@
 <script setup>
 import { ref } from 'vue';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import {
+ signOut
+} from 'firebase/auth';
 import { query, where, getDocs, collection, doc, getDoc } from 'firebase/firestore';
 
 
@@ -140,7 +143,7 @@ const handleStudentLogin = async () => {
         router.push('/'); // Redirect to student dashboard
       } else {
         studentError.value = 'Student account data not found. Please complete registration or contact support.';
-        await auth.signOut(); // Sign out if app-specific DB record is missing
+        await signOut(auth); 
       }
     } else {
       studentError.value = 'Login failed. Please check your credentials.';
@@ -202,7 +205,7 @@ const handleDriverLogin = async () => {
         router.push('/driver/dashboard'); // Redirect to driver dashboard
       } else {
         driverError.value = 'Driver account data not found. Please complete registration or contact support.';
-        await auth.signOut(); // Sign out the user as their app-specific data is missing
+        await signOut(auth); 
       }
     } else {
       // This case implies signInWithEmailAndPassword itself didn't throw for bad credentials but returned no user, which is unusual.

@@ -65,7 +65,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from '#imports';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import {
   query,
   where,
@@ -151,7 +151,7 @@ const handleLogin = async () => {
         router.push('/driver/dashboard');
       } else {
         error.value = 'Driver data not found. Please contact support.';
-        await auth.signOut(); // Sign out if app-specific DB record is missing
+        await signOut(auth); 
       }
     } else {
       error.value = 'Login failed. Please check your credentials.';
