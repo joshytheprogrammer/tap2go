@@ -1,5 +1,8 @@
 <template>
   <div class="min-h-screen bg-gray-50">
+    <!-- Driver Navbar -->
+    <DriverNavbar />
+    
     <!-- Header with user greeting -->
     <UContainer class="py-6">
       <div class="flex items-center justify-between mb-6">
@@ -8,13 +11,13 @@
           <p class="text-gray-600">Welcome back, {{ driverName || 'Driver' }}!</p>
         </div>
         <UButton
-          icon="i-heroicons-user-circle"
+          icon="i-heroicons-arrow-path"
           color="gray"
           variant="ghost"
-          to="/driver/profile"
+          @click="refreshDashboard"
           class="flex items-center"
         >
-          Profile
+          Refresh
         </UButton>
       </div>
       
@@ -237,6 +240,22 @@ const setupTransactionListener = () => {
     });
   }, (error) => {
     console.error('Transaction listener error:', error);
+  });
+};
+
+// Method to refresh dashboard data
+const refreshDashboard = () => {
+  loading.value = true;
+  fetchDriverData();
+  setupTransactionListener();
+  
+  // Show refresh toast
+  toast.add({
+    title: 'Dashboard Refreshed',
+    description: 'Latest information has been loaded',
+    icon: 'i-heroicons-check-circle',
+    color: 'blue',
+    timeout: 3000
   });
 };
 

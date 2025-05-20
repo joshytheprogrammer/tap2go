@@ -1,190 +1,195 @@
 <template>
-  <div class="container mx-auto px-4 py-8 min-h-screen bg-gray-50">
-    <!-- Page Header -->
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-900">Driver Profile</h1>
-      <p class="text-gray-500">Manage your personal information and account settings</p>
-    </div>
-
-    <!-- Loading State -->
-    <div v-if="loading" class="flex flex-col items-center justify-center py-10">
-      <UIcon name="i-heroicons-arrow-path" class="text-blue-500 w-8 h-8 animate-spin mb-2" />
-      <p class="text-gray-600">Loading your profile...</p>
-    </div>
-
-    <!-- Error State -->
-    <div v-else-if="error" class="p-6 bg-red-50 border border-red-200 rounded-lg text-center mb-6">
-      <UIcon name="i-heroicons-exclamation-triangle" class="text-red-500 w-8 h-8 mx-auto mb-2" />
-      <p class="text-red-600 font-medium">Error loading profile</p>
-      <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-      <UButton color="red" variant="soft" size="sm" class="mt-3" @click="fetchProfile(userStore.getUser)">
-        Try Again
-      </UButton>
-    </div>
-
-    <div v-else class="block mb-8 gap-8">
-      <!-- Left Column - Profile Picture and Stats -->
-      <div class="">
-        <UCard>
-          <template #header>
-            <div class="flex items-center justify-between">
-              <h2 class="text-lg font-semibold text-gray-900">Profile Information</h2>
-              <UBadge color="green" variant="subtle">Active</UBadge>
-            </div>
-          </template>
-
-          <!-- Profile Picture Section -->
-          <div class="flex flex-col items-center py-4">
-            <UAvatar 
-              :src="editableProfileData.profilePicture || ''" 
-              :alt="profileData.name || 'Driver'"
-              size="2xl"
-              class="mb-4 border-2 border-blue-100 ring-4 ring-blue-50"
-            />
-            <h3 class="text-xl font-medium text-gray-900 mt-2">
-              {{ profileData.name || 'Driver Name' }}
-            </h3>
-            <p class="text-gray-500 flex items-center gap-1 mt-1">
-              <UIcon name="i-heroicons-truck" class="w-4 h-4" />
-              {{ profileData.licensePlate || 'No License Plate' }}
-            </p>
-            
-            <div class="mt-6 w-full">
-              <UFormGroup label="Profile Picture URL" name="profilePicture">
-                <UInput 
-                  v-model="editableProfileData.profilePicture"
-                  placeholder="https://example.com/image.png"
-                  icon="i-heroicons-photo"
-                />
-              </UFormGroup>
-            </div>
-          </div>
-
-          <!-- Stats Section -->
-          <div class="border-t border-gray-100 pt-4 mt-2">
-            <h3 class="font-medium text-gray-900 mb-3">Driver Information</h3>
-            <div class="space-y-3">
-              <div class="flex justify-between items-center">
-                <span class="text-gray-600">License Plate</span>
-                <span class="font-medium">{{ profileData.licensePlate }}</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-gray-600">Driver ID</span>
-                <span class="font-medium truncate">{{ userStore.getUser?.slice(0, 8) || 'N/A' }}</span>
-              </div>
-            </div>
-          </div>
-        </UCard>
+  <div class="min-h-screen bg-gray-50">
+    <!-- Driver Navbar -->
+    <DriverNavbar />
+    
+    <UContainer class="py-6">
+      <!-- Page Header -->
+      <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-900">Driver Profile</h1>
+        <p class="text-gray-500">Manage your personal information and account settings</p>
       </div>
 
-      <!-- Right Column - Editable Profile Information -->
-      <div class="block mt-4 w-full">
-        <UCard>
-          <template #header>
-            <div class="flex items-center justify-between">
-              <h2 class="text-lg font-semibold text-gray-900">Edit Profile</h2>
-              <UButton 
-                color="blue" 
-                variant="soft" 
-                size="sm" 
-                icon="i-heroicons-arrow-path"
-                :loading="loading"
-                @click="fetchProfile(userStore.getUser)"
-              >
-                Refresh
-              </UButton>
-            </div>
-          </template>
+      <!-- Loading State -->
+      <div v-if="loading" class="flex flex-col items-center justify-center py-10">
+        <UIcon name="i-heroicons-arrow-path" class="text-blue-500 w-8 h-8 animate-spin mb-2" />
+        <p class="text-gray-600">Loading your profile...</p>
+      </div>
 
-          <form @submit.prevent="updateProfile" class="space-y-6">
-            <!-- Personal Information Section -->
-            <div>
-              <h3 class="text-base font-medium text-gray-900 mb-4 pb-2 border-b border-gray-100">
-                Personal Information
-              </h3>
-              <div class="block space-y-4 gap-4">
-                <UFormGroup label="Full Name" name="name">
-                  <UInput 
-                    v-model="editableProfileData.name" 
-                    placeholder="Enter your full name"
-                    icon="i-heroicons-user"
-                  />
-                </UFormGroup>
-                
-                <UFormGroup label="Phone Number" name="phoneNumber">
-                  <UInput 
-                    v-model="editableProfileData.phoneNumber" 
-                    placeholder="Enter your phone number"
-                    icon="i-heroicons-phone"
-                  />
-                </UFormGroup>
-                
-                <UFormGroup label="License Plate (Read-only)" name="licensePlate">
-                  <UInput 
-                    :model-value="profileData.licensePlate" 
-                    readonly
-                    class="bg-gray-50"
-                    icon="i-heroicons-truck"
-                  />
-                </UFormGroup>
+      <!-- Error State -->
+      <div v-else-if="error" class="p-6 bg-red-50 border border-red-200 rounded-lg text-center mb-6">
+        <UIcon name="i-heroicons-exclamation-triangle" class="text-red-500 w-8 h-8 mx-auto mb-2" />
+        <p class="text-red-600 font-medium">Error loading profile</p>
+        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+        <UButton color="red" variant="soft" size="sm" class="mt-3" @click="fetchProfile(userStore.getUser)">
+          Try Again
+        </UButton>
+      </div>
+
+      <div v-else class="block mb-8 gap-8">
+        <!-- Left Column - Profile Picture and Stats -->
+        <div class="">
+          <UCard>
+            <template #header>
+              <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900">Profile Information</h2>
+                <UBadge color="green" variant="subtle">Active</UBadge>
               </div>
-            </div>
-            
-            <!-- Bank Details Section -->
-            <div>
-              <h3 class="text-base font-medium text-gray-900 mb-4 pb-2 border-b border-gray-100">
-                Bank Details
+            </template>
+
+            <!-- Profile Picture Section -->
+            <div class="flex flex-col items-center py-4">
+              <UAvatar 
+                :src="editableProfileData.profilePicture || ''" 
+                :alt="profileData.name || 'Driver'"
+                size="2xl"
+                class="mb-4 border-2 border-blue-100 ring-4 ring-blue-50"
+              />
+              <h3 class="text-xl font-medium text-gray-900 mt-2">
+                {{ profileData.name || 'Driver Name' }}
               </h3>
-              <div class="block space-y-4 gap-4">
-                <UFormGroup label="Bank Name" name="bankName">
-                  <UInput 
-                    v-model="editableProfileData.bankName" 
-                    placeholder="Enter your bank name"
-                    icon="i-heroicons-building-library"
-                  />
-                </UFormGroup>
-                
-                <UFormGroup label="Account Number" name="accountNumber">
-                  <UInput 
-                    v-model="editableProfileData.accountNumber" 
-                    placeholder="Enter your account number"
-                    icon="i-heroicons-credit-card"
-                  />
-                </UFormGroup>
-              </div>
-            </div>
-            
-            <UDivider />
-            
-            <!-- Form Actions -->
-            <div class="flex justify-between items-center">
-              <UButton 
-                to="/driver/dashboard" 
-                color="gray" 
-                variant="soft"
-                icon="i-heroicons-arrow-left"
-              >
-                Back to Dashboard
-              </UButton>
+              <p class="text-gray-500 flex items-center gap-1 mt-1">
+                <UIcon name="i-heroicons-truck" class="w-4 h-4" />
+                {{ profileData.licensePlate || 'No License Plate' }}
+              </p>
               
-              <UButton 
-                type="submit" 
-                color="blue"
-                :loading="savingProfile" 
-                :disabled="savingProfile"
-                icon="i-heroicons-check"
-              >
-                {{ savingProfile ? 'Saving...' : 'Save Changes' }}
-              </UButton>
+              <div class="mt-6 w-full">
+                <UFormGroup label="Profile Picture URL" name="profilePicture">
+                  <UInput 
+                    v-model="editableProfileData.profilePicture"
+                    placeholder="https://example.com/image.png"
+                    icon="i-heroicons-photo"
+                  />
+                </UFormGroup>
+              </div>
             </div>
-            
-            <p v-if="saveMessage" :class="messageClass" class="mt-3 text-sm">
-              {{ saveMessage }}
-            </p>
-          </form>
-        </UCard>
+
+            <!-- Stats Section -->
+            <div class="border-t border-gray-100 pt-4 mt-2">
+              <h3 class="font-medium text-gray-900 mb-3">Driver Information</h3>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600">License Plate</span>
+                  <span class="font-medium">{{ profileData.licensePlate }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600">Driver ID</span>
+                  <span class="font-medium truncate">{{ userStore.getUser?.slice(0, 8) || 'N/A' }}</span>
+                </div>
+              </div>
+            </div>
+          </UCard>
+        </div>
+
+        <!-- Right Column - Editable Profile Information -->
+        <div class="block mt-4 w-full">
+          <UCard>
+            <template #header>
+              <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900">Edit Profile</h2>
+                <UButton 
+                  color="blue" 
+                  variant="soft" 
+                  size="sm" 
+                  icon="i-heroicons-arrow-path"
+                  :loading="loading"
+                  @click="fetchProfile(userStore.getUser)"
+                >
+                  Refresh
+                </UButton>
+              </div>
+            </template>
+
+            <form @submit.prevent="updateProfile" class="space-y-6">
+              <!-- Personal Information Section -->
+              <div>
+                <h3 class="text-base font-medium text-gray-900 mb-4 pb-2 border-b border-gray-100">
+                  Personal Information
+                </h3>
+                <div class="block space-y-4 gap-4">
+                  <UFormGroup label="Full Name" name="name">
+                    <UInput 
+                      v-model="editableProfileData.name" 
+                      placeholder="Enter your full name"
+                      icon="i-heroicons-user"
+                    />
+                  </UFormGroup>
+                  
+                  <UFormGroup label="Phone Number" name="phoneNumber">
+                    <UInput 
+                      v-model="editableProfileData.phoneNumber" 
+                      placeholder="Enter your phone number"
+                      icon="i-heroicons-phone"
+                    />
+                  </UFormGroup>
+                  
+                  <UFormGroup label="License Plate (Read-only)" name="licensePlate">
+                    <UInput 
+                      :model-value="profileData.licensePlate" 
+                      readonly
+                      class="bg-gray-50"
+                      icon="i-heroicons-truck"
+                    />
+                  </UFormGroup>
+                </div>
+              </div>
+              
+              <!-- Bank Details Section -->
+              <div>
+                <h3 class="text-base font-medium text-gray-900 mb-4 pb-2 border-b border-gray-100">
+                  Bank Details
+                </h3>
+                <div class="block space-y-4 gap-4">
+                  <UFormGroup label="Bank Name" name="bankName">
+                    <UInput 
+                      v-model="editableProfileData.bankName" 
+                      placeholder="Enter your bank name"
+                      icon="i-heroicons-building-library"
+                    />
+                  </UFormGroup>
+                  
+                  <UFormGroup label="Account Number" name="accountNumber">
+                    <UInput 
+                      v-model="editableProfileData.accountNumber" 
+                      placeholder="Enter your account number"
+                      icon="i-heroicons-credit-card"
+                    />
+                  </UFormGroup>
+                </div>
+              </div>
+              
+              <UDivider />
+              
+              <!-- Form Actions -->
+              <div class="flex justify-between items-center">
+                <UButton 
+                  to="/driver/dashboard" 
+                  color="gray" 
+                  variant="soft"
+                  icon="i-heroicons-arrow-left"
+                >
+                  Back to Dashboard
+                </UButton>
+                
+                <UButton 
+                  type="submit" 
+                  color="blue"
+                  :loading="savingProfile" 
+                  :disabled="savingProfile"
+                  icon="i-heroicons-check"
+                >
+                  {{ savingProfile ? 'Saving...' : 'Save Changes' }}
+                </UButton>
+              </div>
+              
+              <p v-if="saveMessage" :class="messageClass" class="mt-3 text-sm">
+                {{ saveMessage }}
+              </p>
+            </form>
+          </UCard>
+        </div>
       </div>
-    </div>
+    </UContainer>
   </div>
 </template>
 
