@@ -59,7 +59,8 @@ const hasUnreadNotifications = ref(false);
 const menuOptions = ref([
   { label: "Request New Card", url: 'request-card' },
   { label: "Submit Complaints", url: 'submit-complaint' },
-  { label: "Contact", url: 'contact' }
+  { label: "Contact", url: 'contact' },
+  { label: "About Tap2Go", url: 'about' }
 ]);
 
 // Fetch profile details in real-time

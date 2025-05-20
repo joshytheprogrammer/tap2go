@@ -195,6 +195,11 @@ const userMenuItems = computed(() => [
       click: () => navigateToDashboard('transactions')
     },
     {
+      label: 'Help & Support',
+      icon: 'i-heroicons-question-mark-circle',
+      to: '/driver/support'
+    },
+    {
       label: 'Settings',
       icon: 'i-heroicons-cog-6-tooth',
       to: '/driver/settings'

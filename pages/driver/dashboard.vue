@@ -121,8 +121,7 @@
                   <UIcon name="i-heroicons-banknotes" />
                 </template>
                 Request Withdrawal
-              </UButton>
-              <UButton block color="amber" variant="soft" class="justify-start">
+              </UButton>              <UButton block color="amber" variant="soft" to="/driver/support" class="justify-start">
                 <template #leading>
                   <UIcon name="i-heroicons-question-mark-circle" />
                 </template>
