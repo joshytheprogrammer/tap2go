@@ -155,11 +155,11 @@
       
       <!-- Pagination -->
       <div class="mt-6 flex justify-between items-center">
-        <UText class="text-sm text-gray-500">
+        <p class="text-sm text-gray-500">
           Showing {{ ((currentPage - 1) * itemsPerPage) + 1 }} to 
           {{ Math.min(currentPage * itemsPerPage, filteredTransactions.length) }} 
           of {{ filteredTransactions.length }} transactions
-        </UText>
+        </p>
         
         <UPagination
           v-model="currentPage"

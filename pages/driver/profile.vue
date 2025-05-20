@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <div class="container mx-auto px-4 py-8 min-h-screen bg-gray-50">
     <!-- Page Header -->
     <div class="mb-8">
       <h1 class="text-2xl font-bold text-gray-900">Driver Profile</h1>
@@ -22,9 +22,9 @@
       </UButton>
     </div>
 
-    <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div v-else class="block mb-8 gap-8">
       <!-- Left Column - Profile Picture and Stats -->
-      <div class="lg:col-span-1">
+      <div class="">
         <UCard>
           <template #header>
             <div class="flex items-center justify-between">
@@ -78,7 +78,7 @@
       </div>
 
       <!-- Right Column - Editable Profile Information -->
-      <div class="lg:col-span-2">
+      <div class="block mt-4 w-full">
         <UCard>
           <template #header>
             <div class="flex items-center justify-between">
@@ -102,7 +102,7 @@
               <h3 class="text-base font-medium text-gray-900 mb-4 pb-2 border-b border-gray-100">
                 Personal Information
               </h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="block space-y-4 gap-4">
                 <UFormGroup label="Full Name" name="name">
                   <UInput 
                     v-model="editableProfileData.name" 
@@ -135,7 +135,7 @@
               <h3 class="text-base font-medium text-gray-900 mb-4 pb-2 border-b border-gray-100">
                 Bank Details
               </h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="block space-y-4 gap-4">
                 <UFormGroup label="Bank Name" name="bankName">
                   <UInput 
                     v-model="editableProfileData.bankName" 
