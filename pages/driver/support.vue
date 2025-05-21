@@ -93,7 +93,7 @@
           </div>
         </template>
         
-        <div class="grid md:grid-cols-2 gap-4">
+        <div class="block space-y-4 gap-4">
           <UButton
             block
             color="blue"

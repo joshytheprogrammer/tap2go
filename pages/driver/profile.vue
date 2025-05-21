@@ -133,17 +133,23 @@
                   </UFormGroup>
                 </div>
               </div>
-              
-              <!-- Bank Details Section -->
+                <!-- Bank Details Section -->
               <div>
-                <h3 class="text-base font-medium text-gray-900 mb-4 pb-2 border-b border-gray-100">
-                  Bank Details
-                </h3>
+                <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                  <h3 class="text-base font-medium text-gray-900">
+                    Bank Details for Withdrawals
+                  </h3>
+                </div>
+                
                 <div class="block space-y-4 gap-4">
+                  <p class="text-sm text-gray-500 mb-3">
+                    Your earnings will only be transferred to the bank account you specify below. Please ensure the information is accurate.
+                  </p>
+                
                   <UFormGroup label="Bank Name" name="bankName">
                     <UInput 
                       v-model="editableProfileData.bankName" 
-                      placeholder="Enter your bank name"
+                      placeholder="Enter your bank name (e.g., First Bank, GTBank)"
                       icon="i-heroicons-building-library"
                     />
                   </UFormGroup>
@@ -151,11 +157,21 @@
                   <UFormGroup label="Account Number" name="accountNumber">
                     <UInput 
                       v-model="editableProfileData.accountNumber" 
-                      placeholder="Enter your account number"
+                      placeholder="Enter your 10-digit account number"
                       icon="i-heroicons-credit-card"
+                      maxlength="10"
+                      pattern="[0-9]*"
                     />
                   </UFormGroup>
+                  
+                  <UBadge 
+                    :color="editableProfileData.bankName && editableProfileData.accountNumber ? 'green' : 'amber'" 
+                    variant="subtle"
+                  >
+                    {{ editableProfileData.bankName && editableProfileData.accountNumber ? 'Complete' : 'Required for Withdrawals' }}
+                  </UBadge>
                 </div>
+                
               </div>
               
               <UDivider />

@@ -211,7 +211,8 @@ const driverError = ref(null);
 // Validation function for student matric number (from your example)
 function validateStudentMatric(matric) {
   const matricRegex = /^\d{2}[A-Za-z]{2}\d{6}$/; // e.g., 22CH032034
-  return matricRegex.test(matric);
+  const cleanedMatric = matric.replace(/\s+/g, ''); // Remove all spaces
+  return matricRegex.test(cleanedMatric);
 }
 
 // Validation function for student email (from your example)

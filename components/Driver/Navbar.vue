@@ -64,78 +64,9 @@
             </UButton>
           </UDropdown>
         </div>
-        
-        <!-- Mobile menu button -->
-        <div class="md:hidden">
-          <UButton
-            icon="i-heroicons-bars-3"
-            color="gray"
-            variant="ghost"
-            @click="isMobileMenuOpen = !isMobileMenuOpen"
-            :ui="{ rounded: 'rounded-full' }"
-          />
-        </div>
       </nav>
     </UContainer>
     
-    <!-- Mobile Navigation Menu -->
-    <Transition name="slide">
-      <div v-if="isMobileMenuOpen" class="md:hidden">
-        <div class="bg-white border-t border-gray-200 py-2">
-          <UContainer>
-            <div class="space-y-1 pb-2">
-              <UButton
-                to="/driver/dashboard"
-                variant="ghost"
-                color="gray"
-                block
-                class="justify-start"
-                :class="{ 'bg-gray-100': activeRoute === 'dashboard' }"
-              >
-                <UIcon name="i-heroicons-home" class="w-5 h-5 mr-2" />
-                Dashboard
-              </UButton>
-              
-              <UButton
-                to="/driver/profile"
-                variant="ghost"
-                color="gray"
-                block
-                class="justify-start"
-                :class="{ 'bg-gray-100': activeRoute === 'profile' }"
-              >
-                <UIcon name="i-heroicons-user-circle" class="w-5 h-5 mr-2" />
-                Profile
-              </UButton>
-              
-              <UButton
-                @click="reportIssue"
-                variant="ghost"
-                color="gray"
-                block
-                class="justify-start"
-              >
-                <UIcon name="i-heroicons-flag" class="w-5 h-5 mr-2" />
-                Report Issue
-              </UButton>
-              
-              <div class="h-px bg-gray-200 my-2"></div>
-              
-              <UButton
-                @click="logout"
-                variant="ghost"
-                color="red"
-                block
-                class="justify-start"
-              >
-                <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-5 h-5 mr-2" />
-                Logout
-              </UButton>
-            </div>
-          </UContainer>
-        </div>
-      </div>
-    </Transition>
   </div>
 </template>
 
@@ -192,7 +123,7 @@ const userMenuItems = computed(() => [
     {
       label: 'Transaction History',
       icon: 'i-heroicons-clipboard-document-list',
-      click: () => navigateToDashboard('transactions')
+      to: '/driver/transactions'
     },
     {
       label: 'Help & Support',

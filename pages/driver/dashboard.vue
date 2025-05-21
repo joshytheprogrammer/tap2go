@@ -21,16 +21,26 @@
         </UButton>
       </div>
       
-      <!-- Stats Cards -->
+      <!-- Stats Cards -->      
       <div class="block space-y-8">
         <UCard>
           <template #header>
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-currency-dollar" class="text-green-500 w-6 h-6" />
-              <h3 class="font-medium text-gray-700">Current Balance</h3>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <UIcon name="i-heroicons-currency-dollar" class="text-green-500 w-6 h-6" />
+                <h3 class="font-medium text-gray-700">Current Balance</h3>
+              </div>
+              <UButton 
+                to="/driver/transactions" 
+                size="xs" 
+                color="blue" 
+                variant="soft"
+              >
+                Withdrawal History
+              </UButton>
             </div>
           </template>
-          <div class="text-2xl font-bold text-gray-900">₦{{ driverBalance.toFixed(2) }}</div>
+          <ComponentsDriverWithdrawEarnings :initial-balance="driverBalance" />
           <template #footer>
             <div class="text-xs text-gray-500">Last updated: {{ lastUpdated }}</div>
           </template>
@@ -115,13 +125,12 @@
                   <UIcon name="i-heroicons-user-circle" />
                 </template>
                 Edit Profile
-              </UButton>
-              <UButton block color="emerald" variant="soft" class="justify-start">
+              </UButton>              <UButton block color="emerald" variant="soft" to="/driver/transactions" class="justify-start">
                 <template #leading>
                   <UIcon name="i-heroicons-banknotes" />
                 </template>
-                Request Withdrawal
-              </UButton>              <UButton block color="amber" variant="soft" to="/driver/support" class="justify-start">
+                Withdraw Earnings
+              </UButton><UButton block color="amber" variant="soft" to="/driver/support" class="justify-start">
                 <template #leading>
                   <UIcon name="i-heroicons-question-mark-circle" />
                 </template>
@@ -139,6 +148,7 @@
 // Import components
 import ComponentsDriverTransactionHistory from '~/components/Driver/TransactionHistory.vue';
 import ComponentsDriverIssueReporter from '~/components/Driver/IssueReporter.vue';
+import ComponentsDriverWithdrawEarnings from '~/components/Driver/WithdrawEarnings.vue';
 import { ref, onMounted, onUnmounted } from 'vue';
 import { doc, getDoc, onSnapshot, collection, query, where, orderBy, limit } from 'firebase/firestore';
 import { useUserStore } from '~/stores/user';
@@ -165,23 +175,31 @@ const fetchDriverData = async () => {
   if (!userId) return;
 
   try {
-    // Fetch driver profile
-    const profileRef = doc(db, 'driversProfile', userId);
-    const profileSnap = await getDoc(profileRef);
+    // Fetch both profile data and user data in parallel
+    const profileRef = doc(db, 'driverProfile', userId);
+    const userRef = doc(db, 'drivers_users', userId);
+    const [profileSnap, userSnap] = await Promise.all([
+      getDoc(profileRef),
+      getDoc(userRef)
+    ]);
     
+    // Get profile data
     if (profileSnap.exists()) {
-      driverName.value = profileSnap.data().name || '';
-      licensePlate.value = profileSnap.data().licensePlate || '';
-    } else {
-      // Try to fetch from drivers_users if profile doesn't exist
-      const userRef = doc(db, 'drivers_users', userId);
-      const userSnap = await getDoc(userRef);
-      
-      if (userSnap.exists()) {
-        licensePlate.value = userSnap.data().licensePlate || '';
-        driverBalance.value = userSnap.data().balance || 0;
+      const profileData = profileSnap.data();
+      driverName.value = profileData.name || '';
+      licensePlate.value = profileData.licensePlate || '';
+    } 
+    
+    // Get balance and other user data
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      driverBalance.value = userData.balance || 0;
+      if (!licensePlate.value) {
+        licensePlate.value = userData.licensePlate || '';
       }
     }
+    
+    lastUpdated.value = new Date().toLocaleString();
   } catch (error) {
     console.error('Error fetching driver data:', error);
     toast.add({
